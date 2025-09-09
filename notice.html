@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice Board - Dept. of Civil Engineering</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="images/logo.png" alt="Department of Civil Engineering Logo">
+        </a>
+        <ul class="nav-links" id="main-nav-links">
+             <!-- Populated by auth.js -->
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>Notice Board</h1>
+            <p>The latest news and announcements from the department.</p>
+        </div>
+        <div class="notice-list" id="notice-list-container">
+            <p>Loading notices...</p>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
+        <p>Gopalganj-8105, Bangladesh</p>
+    </footer>
+
+    <script src="auth.js" defer></script>
+    <script>
+        const noticeContainer = document.getElementById('notice-list-container');
+        
+        // Function to format the date
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+        }
+
+        async function loadNotices() {
+            const { data, error } = await supabaseClient
+                .from('notices')
+                .select('*')
+                .order('created_at', { ascending: false }); // Newest first
+
+            if (error) {
+                console.error('Error fetching notices:', error);
+                noticeContainer.innerHTML = '<p>Could not load notices.</p>';
+                return;
+            }
+            if (data.length === 0) {
+                noticeContainer.innerHTML = '<p>No notices have been posted yet.</p>';
+                return;
+            }
+
+            noticeContainer.innerHTML = ''; // Clear loading message
+            data.forEach(notice => {
+                let contentHTML = '';
+                switch (notice.content_type) {
+                    case 'text':
+                        contentHTML = `<p>${notice.content_data}</p>`;
+                        break;
+                    case 'image':
+                        contentHTML = `<img src="${notice.content_data}" alt="${notice.title}">`;
+                        break;
+                    case 'pdf':
+                        contentHTML = `<a href="${notice.content_data}" class="notice-pdf-link" target="_blank">Download PDF</a>`;
+                        break;
+                    case 'video':
+                        // Assumes a YouTube embed URL
+                        contentHTML = `<iframe src="${notice.content_data}" allowfullscreen></iframe>`;
+                        break;
+                }
+
+                const noticeCard = `
+                    <div class="notice-card">
+                        <div class="notice-card-header">
+                            <h3>${notice.title}</h3>
+                            <p>Posted on: ${formatDate(notice.created_at)}</p>
+                        </div>
+                        <div class="notice-card-body">
+                            ${contentHTML}
+                        </div>
+                    </div>
+                `;
+                noticeContainer.innerHTML += noticeCard;
+            });
+        }
+        loadNotices();
+    </script>
+</body>
+</html>

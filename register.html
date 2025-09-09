@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Dept. of Civil Engineering</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <a href="index.html" class="back-to-home-btn">&larr; Back to Home</a>
+    <div class="auth-page-container">
+        <div class="auth-panel branding-panel">
+            <div class="branding-panel-content">
+                <h1>Dept. of Civil Engineering</h1>
+                <p>Gopalganj Science and Technology University</p>
+            </div>
+        </div>
+        <div class="auth-panel form-panel">
+            <div class="form-container">
+                <h2>Create a New Account</h2>
+                <p id="auth-error"></p>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-name">Full Name (as per university records)</label>
+                        <input type="text" id="register-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-id">Student ID</label>
+                        <input type="text" id="register-id" placeholder="e.g., 21CE001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password (at least 8 characters; Lowercase, Uppercase and Digits)</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-number">Phone Number</label>
+                        <input type="tel" id="register-number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-photo">Profile Picture</label>
+                        <input type="file" id="register-photo" accept="image/png, image/jpeg" required>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+                <a href="login.html" class="form-link">Already have an account? Login here.</a>
+            </div>
+        </div>
+    </div>
+    <script src="auth.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch 2017-18 - Dept. of Civil Engineering</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+    <img src="images/logo.png" alt="Department of Civil Engineering Logo">
+</a>
+        <ul class="nav-links" id="main-nav-links"></ul>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>Students of Session 2017-18</h1>
+        </div>
+        <div class="tab-nav">
+            <a href="#" class="tab-link active" onclick="showTab(event, 'students')">Student List</a>
+            <a href="#" class="tab-link" onclick="showTab(event, 'advisor')">Batch Advisor</a>
+            <a href="#" class="tab-link" onclick="showTab(event, 'schedule')">Class Schedule</a>
+            <a href="#" class="tab-link" onclick="showTab(event, 'contents')">Class Contents</a>
+        </div>
+        <div id="students" class="tab-content active">
+            <h2>Full Student List</h2>
+            <div class="profile-grid" id="student-grid"><p>Loading students...</p></div>
+        </div>
+        <div id="advisor" class="tab-content">
+            <h2>Batch Advisor</h2>
+            <div class="profile-card" style="max-width: 350px; margin: auto;">
+                <img src="https://placehold.co/400" alt="Profile Photo">
+                <h3>Dr. Salma Akter</h3>
+                <p class="title">Batch Advisor</p>
+            </div>
+        </div>
+        <div id="schedule" class="tab-content"><h2>Class Schedule (Routine)</h2><p style="text-align:center;">Schedule for this batch will be updated soon.</p></div>
+        <div id="contents" class="tab-content"><h2>Class Contents & Resources</h2><p style="text-align:center;">Resources for this batch will be uploaded soon.</p></div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
+        <p>Gopalganj-8105, Bangladesh</p>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="auth-guard.js"></script>
+    <script>
+        function showTab(event, tabName) {
+            event.preventDefault();
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) { tabcontent[i].classList.remove("active"); }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) { tablinks[i].classList.remove("active"); }
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        const studentGrid = document.getElementById('student-grid');
+        async function loadStudents() {
+            const { data, error } = await supabaseClient.from('profiles').select('*').like('student_id', '17CE%').order('student_id');
+            if (error) {
+                console.error('Error fetching students:', error);
+                studentGrid.innerHTML = '<p>Could not load student data.</p>';
+                return;
+            }
+            if (data.length === 0) {
+                studentGrid.innerHTML = '<p>No students found for this session.</p>';
+                return;
+            }
+            studentGrid.innerHTML = '';
+            data.forEach(student => {
+                const cardHTML = `<div class="profile-card"><img loading="lazy" src="${student.avatar_url || `https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}`}" alt="Photo of ${student.full_name}"><h3>${student.full_name}</h3><p><strong>Student ID:</strong> ${student.student_id}</p><p><strong>Email:</strong> ${student.email || 'N/A'}</p><p><strong>Number:</strong> ${student.phone_number || 'N/A'}</p></div>`;
+                studentGrid.innerHTML += cardHTML;
+            });
+        }
+        loadStudents();
+    </script>
+</body>
+</html>

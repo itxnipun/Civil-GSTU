@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Representatives - Dept. of Civil Engineering</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+    <img src="images/logo.png" alt="Department of Civil Engineering Logo">
+</a>
+        <ul class="nav-links" id="main-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+            <li><a href="students.html">Students</a></li>
+            <li><a href="class-representatives.html" class="active">Class Reps</a></li>
+            <li><a href="question-bank.html">Question Bank</a></li>
+            <li><a href="results.html">Results</a></li>
+            <li><a href="notice.html">Notice Board</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+    <div class="container" id="main-container">
+        <div class="page-header">
+            <h1>Class Representatives</h1>
+            <p>The elected student leaders from each batch.</p>
+        </div>
+        </div>
+    <footer class="footer">
+        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
+        <p>Gopalganj-8105, Bangladesh</p>
+    </footer>
+
+    <script src="auth.js"></script> 
+    <script>
+        const mainContainer = document.getElementById('main-container');
+
+        // This function now fetches CR data from your Supabase table
+        async function loadClassReps() {
+            const { data, error } = await supabaseClient
+                .from('class_representatives')
+                .select('*')
+                .order('session', { ascending: false }); // Show newest sessions first
+
+            if (error) {
+                console.error('Error fetching class reps:', error);
+                mainContainer.innerHTML += '<p>Could not load Class Representative data.</p>';
+                return;
+            }
+
+            if (data.length === 0) {
+                 mainContainer.innerHTML += '<p>No Class Representative data found.</p>';
+                return;
+            }
+
+            // Loop through the data from the database and create the HTML
+            data.forEach(repData => {
+                const sectionHTML = `
+                    <h2 style="text-align: center; margin-top: 3rem;">Session ${repData.session}</h2>
+                    <div class="reps-container">
+                        <div class="profile-card">
+                            <img src="https://placehold.co/400x400/0D2C54/FFFFFF/png?text=CR" alt="CR Photo">
+                            <h3>${repData.cr1_name}</h3>
+                            <p class="title">Class Representative</p>
+                            <p><strong>Student ID:</strong> ${repData.cr1_id}</p>
+                        </div>
+                        <div class="profile-card">
+                            <img src="https://placehold.co/400x400/A31F34/FFFFFF/png?text=CR" alt="CR Photo">
+                            <h3>${repData.cr2_name}</h3>
+                            <p class="title">Class Representative</p>
+                            <p><strong>Student ID:</strong> ${repData.cr2_id}</p>
+                        </div>
+                    </div>
+                `;
+                mainContainer.innerHTML += sectionHTML;
+            });
+        }
+
+        // Run the function to load the data
+        loadClassReps();
+    </script>
+</body>
+</html>

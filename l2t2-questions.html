@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2-T2 Questions - Dept. of Civil Engineering</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+    <img src="images/logo.png" alt="Department of Civil Engineering Logo">
+</a>
+        <ul class="nav-links" id="main-nav-links"></ul>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>Level 2, Term 2 Questions</h1>
+            <p>Click on a session to view the questions.</p>
+        </div>
+        <button class="accordion-button">Session 2024-25 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+        <button class="accordion-button">Session 2023-24 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+        <button class="accordion-button">Session 2022-23 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+        <button class="accordion-button">Session 2021-22 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+        <button class="accordion-button">Session 2020-21 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+        <button class="accordion-button">Session 2019-20 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+        <button class="accordion-button">Session 2018-19 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+        <button class="accordion-button">Session 2017-18 Questions</button>
+        <div class="accordion-panel"><p>No questions uploaded for this session yet.</p></div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
+        <p>Gopalganj-8105, Bangladesh</p>
+    </footer>
+    <script>
+        var acc = document.getElementsByClassName("accordion-button");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
+    <script src="auth.js" defer></script>
+    <script src="auth-guard.js" defer></script>
+</body>
+</html>

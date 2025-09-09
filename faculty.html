@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty - Dept. of Civil Engineering</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+    <img src="images/logo.png" alt="Department of Civil Engineering Logo">
+</a>
+        <ul class="nav-links" id="main-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="faculty.html" class="active">Faculty</a></li>
+            <li><a href="students.html">Students</a></li>
+            <li><a href="class-representatives.html">Class Reps</a></li>
+            <li><a href="question-bank.html">Question Bank</a></li>
+            <li><a href="results.html">Results</a></li>
+            <li><a href="notice.html">Notice Board</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="page-header">
+            <h1>Our Faculty</h1>
+            <p>The dedicated individuals leading and shaping our department.</p>
+        </div>
+        <h2 style="text-align: center;">Dean & Chairman</h2>
+        <div class="reps-container">
+            <div class="profile-card">
+                <img src="images/md-kamruzzaman.jpg" alt="Photo of Dean">
+                <h3>Dr. Md. Kamruzzaman</h3>
+                <p class="title">Dean, Faculty of Engineering</p>
+                <p>Associate Professor, ACCE</p>
+            </div>
+            <div class="profile-card">
+                <img src="images/aohona-arefin.jpg" alt="Photo of Chairman">
+                <h3>Aohona Arefin</h3>
+                <p class="title">Chairman & Assistant Professor</p>
+            </div>
+        </div>
+        <h2 style="margin-top: 3rem; text-align:center;">Active Faculty</h2>
+        <div class="profile-grid" id="active-faculty-grid"></div>
+        <h2 style="margin-top: 3rem; text-align:center;">Faculty on Leave</h2>
+        <div class="profile-grid" id="on-leave-faculty-grid"></div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
+        <p>Gopalganj-8105, Bangladesh</p>
+    </footer>
+    <script>
+        const activeFaculty = [
+            { name: "Aohona Arefin", title: "Assistant Professor", img: "images/aohona-arefin.jpg" }, { name: "Md. Mahmudun Nabi", title: "Lecturer", img: "images/md-mahmudun-nabi.jpg" }, { name: "Md. Izharul Haque Azad", title: "Lecturer", img: "images/md-izharul-haque-azad.jpg" }, { name: "Md. Jihan Hasan", title: "Lecturer", img: "images/md-jihan-hasan.jpg" }
+        ];
+        const onLeaveFaculty = [
+            { name: "Md. Ebrahim Shaik", title: "Assistant Professor", img: "images/md-ebrahim-shaik.jpg" }, { name: "S M Shazeebur Rahman", title: "Lecturer", img: "images/sm-shazeebur-rahman.jpg" }, { name: "Nayeem Islam", title: "Assistant Professor", img: "images/nayeem-islam.jpg" }, { name: "Adhora Tahsin", title: "Lecturer", img: "images/adhora-tahsin.jpg" }
+        ];
+        const activeGrid = document.getElementById('active-faculty-grid');
+        const onLeaveGrid = document.getElementById('on-leave-faculty-grid');
+        function createFacultyCard(person) {
+            return `<div class="profile-card"><img loading="lazy" src="${person.img}" alt="Photo of ${person.name}"><h3>${person.name}</h3><p class="title">${person.title}</p></div>`;
+        }
+        activeFaculty.forEach(person => { activeGrid.innerHTML += createFacultyCard(person); });
+        onLeaveFaculty.forEach(person => { onLeaveGrid.innerHTML += createFacultyCard(person); });
+    </script>
+    <script src="auth.js" defer></script>
+</body>
+</html>

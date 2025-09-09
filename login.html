@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Dept. of Civil Engineering</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <a href="index.html" class="back-to-home-btn">&larr; Back to Home</a>
+    <div class="auth-page-container">
+        <div class="auth-panel branding-panel">
+            <div class="branding-panel-content">
+                <h1>Dept. of Civil Engineering</h1>
+                <p>Gopalganj Science and Technology University</p>
+            </div>
+        </div>
+        <div class="auth-panel form-panel">
+            <div class="form-container">
+                <h2>Login to Your Account</h2>
+                <p id="auth-error"></p>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <a href="forgot-password.html" class="form-link" style="text-align: right; margin-bottom: 1rem;">Forgot Password?</a>
+                    <button type="submit">Login</button>
+                </form>
+                <a href="register.html" class="form-link">Don't have an account? Register here.</a>
+            </div>
+        </div>
+    </div>
+    <script src="auth.js" defer></script>
+</body>
+</html>
