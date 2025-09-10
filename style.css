@@ -601,14 +601,17 @@ h1, h2, h3, h4, h5, h6 {
     padding: 5px;
     display: flex;
     align-items: center;
+    /* Ensure icons are visible */
+    color: var(--text-gray); /* Use your existing text-gray variable */
 }
 
 .password-toggle svg {
     width: 22px;
     height: 22px;
-    stroke: var(--text-gray);
+    /* Ensure the icons are visible */
+    stroke: currentColor; /* Inherit color from parent button */
     stroke-width: 1.5;
-    fill: none;
+    fill: none; /* Icons are outlines, not filled */
     stroke-linecap: round;
     stroke-linejoin: round;
 }
