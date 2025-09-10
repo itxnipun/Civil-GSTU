@@ -11,13 +11,80 @@ const supabaseClient = createClient(supabaseUrl, supabaseKey);
 const navLinks = document.getElementById('main-nav-links');
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
+const forgotPasswordForm = document.getElementById('forgot-password-form');
 const authError = document.getElementById('auth-error');
-// ... (other DOM elements for other pages)
+const authMessage = document.getElementById('auth-message'); // For success messages
 
-// --- Navigation & Login Logic (No changes here) ---
-// ... (The code for nav links and the loginForm listener remains the same)
+// --- Navigation Links ---
+const loggedOutLinks = `
+    <li><a href="index.html">Home</a></li>
+    <li><a href="faculty.html">Faculty</a></li>
+    <li><a href="students.html">Students</a></li>
+    <li><a href="class-representatives.html">Class Reps</a></li>
+    <li><a href="question-bank.html">Question Bank</a></li>
+    <li><a href="results.html">Results</a></li>
+    <li><a href="notice.html">Notice Board</a></li>
+    <li class="login-button"><a href="login.html">Login</a></li>
+`;
+const loggedInLinks = `
+    <li><a href="index.html">Home</a></li>
+    <li><a href="faculty.html">Faculty</a></li>
+    <li><a href="students.html">Students</a></li>
+    <li><a href="class-representatives.html">Class Reps</a></li>
+    <li><a href="question-bank.html">Question Bank</a></li>
+    <li><a href="results.html">Results</a></li>
+    <li><a href="notice.html">Notice Board</a></li>
+    <li class="login-button"><a href="#" id="logout-btn">Logout</a></li>
+`;
 
-// --- NEW TWO-STEP REGISTER LOGIC ---
+// --- Authentication State Listener ---
+supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (navLinks) {
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        if (session) {
+            navLinks.innerHTML = loggedInLinks;
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await supabaseClient.auth.signOut();
+                    window.location.href = 'index.html';
+                });
+            }
+        } else {
+            navLinks.innerHTML = loggedOutLinks;
+        }
+        const links = navLinks.querySelectorAll('a');
+        links.forEach(link => {
+            if (link.getAttribute('href') === currentPage) {
+                link.classList.add('active');
+            }
+        });
+    }
+});
+
+// --- Login Logic ---
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = loginForm['login-email'].value;
+        const password = loginForm['login-password'].value;
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+            authError.textContent = error.message;
+        } else {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user && !user.email_confirmed_at) {
+                await supabaseClient.auth.signOut(); // Log them out immediately
+                authError.textContent = 'Please verify your email before logging in.';
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+    });
+}
+
+// --- TWO-STEP REGISTER LOGIC ---
 if (registerForm) {
     const verifyBtn = document.getElementById('verify-btn');
     const step1 = document.getElementById('step1');
@@ -28,9 +95,10 @@ if (registerForm) {
         verifyBtn.addEventListener('click', async () => {
             const name = registerForm['register-name'].value;
             const studentId = registerForm['register-id'].value.toUpperCase();
+            const session = registerForm['register-session'].value;
             
-            if (!name || !studentId) {
-                authError.textContent = 'Please enter your Name and Student ID.';
+            if (!name || !studentId || !session) {
+                authError.textContent = 'Please fill in your Name, Student ID, and Session.';
                 return;
             }
 
@@ -41,16 +109,17 @@ if (registerForm) {
                     .from('approved_students')
                     .select()
                     .eq('id', studentId)
+                    .eq('name', name)
+                    .eq('session', session)
                     .single();
 
-                if (error || !approvedStudent || approvedStudent.name.toLowerCase() !== name.toLowerCase()) {
-                    throw new Error("Student ID or Name not found in university records.");
+                if (error || !approvedStudent) {
+                    throw new Error("Details do not match our records for the selected session.");
                 }
 
-                // Verification successful!
                 authError.textContent = '';
-                step1.style.display = 'none'; // Hide step 1
-                step2.style.display = 'block'; // Show step 2
+                step1.style.display = 'none';
+                step2.style.display = 'block';
 
             } catch (error) {
                 authError.textContent = error.message;
@@ -61,8 +130,6 @@ if (registerForm) {
     // Logic for the final "Create Account" button (Step 2)
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // Get data from both steps
         const name = registerForm['register-name'].value;
         const studentId = registerForm['register-id'].value.toUpperCase();
         const email = registerForm['register-email'].value;
@@ -103,6 +170,30 @@ if (registerForm) {
 
         } catch (error) {
             authError.textContent = error.message;
+        }
+    });
+}
+
+// --- FORGOT PASSWORD LOGIC ---
+if (forgotPasswordForm) {
+    forgotPasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = forgotPasswordForm['forgot-email'].value;
+        
+        authError.textContent = '';
+        if (authMessage) authMessage.textContent = 'Processing...';
+
+        const resetUrl = window.location.origin + '/login.html';
+
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: resetUrl,
+        });
+
+        if (error) {
+            if (authMessage) authMessage.textContent = '';
+            authError.textContent = error.message;
+        } else {
+            if (authMessage) authMessage.textContent = 'Password reset link sent. Please check your email inbox.';
         }
     });
 }
