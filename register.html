@@ -8,109 +8,80 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <a href="index.html" class="back-to-home-btn">&larr; Back to Home</a>
-    <div class="auth-page-container">
-        <div class="auth-panel branding-panel">
-            <div class="branding-panel-content">
-                <h1>Account Registration</h1>
-                <p>Verify your student identity to create an account.</p>
-            </div>
-        </div>
-        <div class="auth-panel form-panel">
-            <div class="form-container">
-                <p id="auth-error"></p>
-                
-                <form id="register-form">
-                    <fieldset id="step1">
-                        <h2>Step 1: Verification</h2>
-                        <div class="form-group">
-                            <label for="register-name">Full Name (as per university records)</label>
-                            <input type="text" id="register-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-id">Student ID</label>
-                            <input type="text" id="register-id" placeholder="e.g., 21CE001" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-session">Session</label>
-                            <select id="register-session" required>
-                                <option value="2024-25">2024-25</option>
-                                <option value="2023-24">2023-24</option>
-                                <option value="2022-23">2022-23</option>
-                                <option value="2021-22">2021-22</option>
-                                <option value="2020-21">2020-21</option>
-                                <option value="2019-20">2019-20</option>
-                                <option value="2018-19">2018-19</option>
-                                <option value="2017-18">2017-18</option>
-                            </select>
-                        </div>
-                        <button type="button" id="verify-btn">Verify Identity</button>
-                    </fieldset>
-
-                    <fieldset id="step2" style="display: none; border: none; padding: 0; margin: 0;">
-                        <h2>Step 2: Create Your Account</h2>
-                         <div class="form-group">
-                            <label for="register-email">Email</label>
-                            <input type="email" id="register-email" required>
-                        </div>
-                         <div class="form-group">
-                            <label for="register-number">Phone Number</label>
-                            <input type="tel" id="register-number" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-password">Password (at least 6 characters)</label>
-                            <div class="password-wrapper">
-                                <input type="password" id="register-password" required>
-                                <button type="button" class="password-toggle" data-for="register-password">
-                                    <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                    <svg class="icon-eye-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24 4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
-                                </button>
-                            </div>
-                        </div>
-                         <div class="form-group">
-                            <label for="confirm-password">Confirm Password</label>
-                            <div class="password-wrapper">
-                                <input type="password" id="confirm-password" required>
-                                <button type="button" class="password-toggle" data-for="confirm-password">
-                                     <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                     <svg class="icon-eye-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24 4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-photo">Profile Picture</label>
-                            <input type="file" id="register-photo" accept="image/png, image/jpeg" required>
-                        </div>
-                        <button type="submit">Create Account & Send Verification Email</button>
-                    </fieldset>
-                </form>
-                <a href="login.html" class="form-link">Already have an account? Login here.</a>
-            </div>
+    <nav class="navbar">
+        <a href="index.html" class="logo"><img src="images/logo.png" alt="Logo"></a>
+        <ul class="nav-links" id="main-nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+            <li><a href="students.html">Students</a></li>
+            <li><a href="class-representatives.html">Class Reps</a></li>
+            <li><a href="question-bank.html">Question Bank</a></li>
+            <li><a href="results.html">Results</a></li>
+            <li><a href="notice.html">Notice Board</a></li>
+            <li class="login-button"><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+         <div class="form-container">
+            <p id="auth-error"></p>
+            <form id="register-form">
+                <fieldset id="step1">
+                    <h2>Step 1: Verification</h2>
+                    <div class="form-group">
+                        <label for="register-name">Full Name (as per university records)</label>
+                        <input type="text" id="register-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-id">Student ID</label>
+                        <input type="text" id="register-id" placeholder="e.g., 21CE001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-session">Session</label>
+                        <select id="register-session" required>
+                            <option value="2024-25">2024-25</option>
+                            <option value="2023-24">2023-24</option>
+                            <option value="2022-23">2022-23</option>
+                            <option value="2021-22">2021-22</option>
+                            <option value="2020-21">2020-21</option>
+                            <option value="2019-20">2019-20</option>
+                            <option value="2018-19">2018-19</option>
+                            <option value="2017-18">2017-18</option>
+                        </select>
+                    </div>
+                    <button type="button" id="verify-btn">Verify Identity</button>
+                </fieldset>
+                <fieldset id="step2" style="display: none; border: none; padding: 0; margin: 0;">
+                    <h2>Step 2: Create Your Account</h2>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-number">Phone Number</label>
+                        <input type="tel" id="register-number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password (at least 6 characters)</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-photo">Profile Picture</label>
+                        <input type="file" id="register-photo" accept="image/png, image/jpeg" required>
+                    </div>
+                    <button type="submit">Create Account & Send Verification Email</button>
+                </fieldset>
+            </form>
+            <a href="login.html" class="form-link">Already have an account? Login here.</a>
         </div>
     </div>
-    
+    <footer class="footer">
+        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
+        <p>Gopalganj-8105, Bangladesh</p>
+    </footer>
     <script src="auth.js" defer></script>
-    <script>
-        // --- Password Show/Hide Toggle ---
-        const toggleButtons = document.querySelectorAll('.password-toggle');
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const inputId = button.dataset.for;
-                const input = document.getElementById(inputId);
-                const eyeIcon = button.querySelector('.icon-eye');
-                const eyeOffIcon = button.querySelector('.icon-eye-off');
-
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    eyeIcon.style.display = 'none';
-                    eyeOffIcon.style.display = 'block';
-                } else {
-                    input.type = 'password';
-                    eyeIcon.style.display = 'block';
-                    eyeOffIcon.style.display = 'none';
-                }
-            });
-        });
-    </script>
 </body>
 </html>

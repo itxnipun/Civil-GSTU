@@ -165,7 +165,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-black);
 }
 
-/* --- Login & Register Forms --- */
+/* --- Login & Register Forms (Simple Design) --- */
 .form-container {
     max-width: 500px;
     margin: 2rem auto;
@@ -186,14 +186,15 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0.5rem;
     font-weight: 700;
 }
-.form-container input {
+.form-container input, .form-container select {
     width: 100%;
     padding: 10px;
     border: 1px solid var(--border-gray);
     border-radius: 4px;
     font-size: 1rem;
 }
-.form-container button {
+.form-container button[type="submit"],
+.form-container button[type="button"] {
     width: 100%;
     padding: 12px;
     background-color: var(--mit-red);
@@ -205,7 +206,8 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-.form-container button:hover {
+.form-container button[type="submit"]:hover,
+.form-container button[type="button"]:hover {
     background-color: #8c1a2b; /* Darker red */
 }
 .form-container .form-link {
@@ -219,58 +221,6 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     margin-bottom: 1rem;
     font-weight: bold;
-}
-
-/* --- Clean Tab Navigation --- */
-.tab-nav {
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid var(--border-gray);
-    margin-bottom: 3rem;
-}
-.tab-nav a {
-    padding: 1rem 1.5rem;
-    text-decoration: none;
-    color: var(--text-gray);
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin-bottom: -1px;
-    border-bottom: 2px solid transparent;
-    transition: color 0.3s, border-bottom-color 0.3s;
-}
-.tab-nav a:hover {
-    color: var(--text-black);
-}
-.tab-nav a.active {
-    color: var(--mit-red);
-    border-bottom-color: var(--mit-red);
-}
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-/* --- Clean Schedule Table --- */
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid var(--border-gray);
-}
-.schedule-table th, .schedule-table td {
-    padding: 15px;
-    text-align: center;
-    border-bottom: 1px solid var(--border-gray);
-}
-.schedule-table thead th {
-    background-color: var(--text-black);
-    color: white;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 700;
-}
-.schedule-table tbody tr:nth-child(even) {
-    background-color: var(--bg-gray);
-}
-.schedule-table .time-col {
-    font-weight: 700;
-    background-color: #f1f1f1;
 }
 
 /* --- Minimalist Link Cards & Lists --- */
@@ -580,38 +530,4 @@ h1, h2, h3, h4, h5, h6 {
 
 .notice-pdf-link:hover {
     background-color: #8c1a2b; /* Darker red */
-}
-/* --- Show/Hide Password Button --- */
-.password-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.password-wrapper input {
-    padding-right: 45px; /* Make space for the icon */
-}
-
-.password-toggle {
-    position: absolute;
-    right: 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    /* Ensure icons are visible */
-    color: var(--text-gray); /* Use your existing text-gray variable */
-}
-
-.password-toggle svg {
-    width: 22px;
-    height: 22px;
-    /* Ensure the icons are visible */
-    stroke: currentColor; /* Inherit color from parent button */
-    stroke-width: 1.5;
-    fill: none; /* Icons are outlines, not filled */
-    stroke-linecap: round;
-    stroke-linejoin: round;
 }

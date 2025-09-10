@@ -84,11 +84,12 @@ if (loginForm) {
     });
 }
 
-// --- TWO-STEP REGISTER LOGIC ---
+// --- FINAL TWO-STEP REGISTER LOGIC ---
 if (registerForm) {
     const verifyBtn = document.getElementById('verify-btn');
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
+    const authError = document.getElementById('auth-error');
 
     // Logic for the "Verify" button (Step 1)
     if (verifyBtn) {
@@ -101,10 +102,10 @@ if (registerForm) {
                 authError.textContent = 'Please fill in your Name, Student ID, and Session.';
                 return;
             }
-
             authError.textContent = 'Verifying...';
 
             try {
+                // This query now checks all three fields
                 const { data: approvedStudent, error } = await supabaseClient
                     .from('approved_students')
                     .select()
@@ -117,6 +118,7 @@ if (registerForm) {
                     throw new Error("Details do not match our records for the selected session.");
                 }
 
+                // Verification successful!
                 authError.textContent = '';
                 step1.style.display = 'none';
                 step2.style.display = 'block';
