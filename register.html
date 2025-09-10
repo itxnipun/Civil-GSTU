@@ -12,40 +12,65 @@
     <div class="auth-page-container">
         <div class="auth-panel branding-panel">
             <div class="branding-panel-content">
-                <h1>Dept. of Civil Engineering</h1>
-                <p>Gopalganj Science and Technology University</p>
+                <h1>Account Registration</h1>
+                <p>Verify your student identity to create an account.</p>
             </div>
         </div>
         <div class="auth-panel form-panel">
             <div class="form-container">
-                <h2>Create a New Account</h2>
                 <p id="auth-error"></p>
+                
                 <form id="register-form">
-                    <div class="form-group">
-                        <label for="register-name">Full Name (as per university records)</label>
-                        <input type="text" id="register-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-id">Student ID</label>
-                        <input type="text" id="register-id" placeholder="e.g., 21CE001" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-email">Email</label>
-                        <input type="email" id="register-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-password">Password (at least 8 characters; Lowercase, Uppercase and Digits)</label>
-                        <input type="password" id="register-password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-number">Phone Number</label>
-                        <input type="tel" id="register-number" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="register-photo">Profile Picture</label>
-                        <input type="file" id="register-photo" accept="image/png, image/jpeg" required>
-                    </div>
-                    <button type="submit">Register</button>
+                    <fieldset id="step1">
+                        <h2>Step 1: Verification</h2>
+                        <div class="form-group">
+                            <label for="register-name">Full Name (as per university records)</label>
+                            <input type="text" id="register-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-id">Student ID</label>
+                            <input type="text" id="register-id" placeholder="e.g., 21CE001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-session">Session</label>
+                            <select id="register-session" required>
+                                <option value="2024-25">2024-25</option>
+                                <option value="2023-24">2023-24</option>
+                                <option value="2022-23">2022-23</option>
+                                <option value="2021-22">2021-22</option>
+                                <option value="2020-21">2020-21</option>
+                                <option value="2019-20">2019-20</option>
+                                <option value="2018-19">2018-19</option>
+                                <option value="2017-18">2017-18</option>
+                            </select>
+                        </div>
+                        <button type="button" id="verify-btn">Verify Identity</button>
+                    </fieldset>
+
+                    <fieldset id="step2" style="display: none; border: none; padding: 0; margin: 0;">
+                        <h2>Step 2: Create Your Account</h2>
+                         <div class="form-group">
+                            <label for="register-email">Email</label>
+                            <input type="email" id="register-email" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="register-number">Phone Number</label>
+                            <input type="tel" id="register-number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Password (at least 6 characters)</label>
+                            <input type="password" id="register-password" required>
+                        </div>
+                         <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-photo">Profile Picture</label>
+                            <input type="file" id="register-photo" accept="image/png, image/jpeg" required>
+                        </div>
+                        <button type="submit">Create Account & Send Verification Email</button>
+                    </fieldset>
                 </form>
                 <a href="login.html" class="form-link">Already have an account? Login here.</a>
             </div>
