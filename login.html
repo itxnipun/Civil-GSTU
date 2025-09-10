@@ -10,12 +10,14 @@
 <body>
     <a href="index.html" class="back-to-home-btn">&larr; Back to Home</a>
     <div class="auth-page-container">
+        
         <div class="auth-panel branding-panel">
             <div class="branding-panel-content">
                 <h1>Dept. of Civil Engineering</h1>
                 <p>Gopalganj Science and Technology University</p>
             </div>
         </div>
+
         <div class="auth-panel form-panel">
             <div class="form-container">
                 <h2>Login to Your Account</h2>
@@ -27,7 +29,13 @@
                     </div>
                     <div class="form-group">
                         <label for="login-password">Password</label>
-                        <input type="password" id="login-password" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="login-password" required>
+                            <button type="button" class="password-toggle" data-for="login-password">
+                                <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <svg class="icon-eye-off" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24 4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </button>
+                        </div>
                     </div>
                     <a href="forgot-password.html" class="form-link" style="text-align: right; margin-bottom: 1rem;">Forgot Password?</a>
                     <button type="submit">Login</button>
@@ -35,7 +43,31 @@
                 <a href="register.html" class="form-link">Don't have an account? Register here.</a>
             </div>
         </div>
+
     </div>
+
     <script src="auth.js" defer></script>
+    <script>
+        // --- Password Show/Hide Toggle ---
+        const toggleButtons = document.querySelectorAll('.password-toggle');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const inputId = button.dataset.for;
+                const input = document.getElementById(inputId);
+                const eyeIcon = button.querySelector('.icon-eye');
+                const eyeOffIcon = button.querySelector('.icon-eye-off');
+
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    eyeIcon.style.display = 'none';
+                    eyeOffIcon.style.display = 'block';
+                } else {
+                    input.type = 'password';
+                    eyeIcon.style.display = 'block';
+                    eyeOffIcon.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
