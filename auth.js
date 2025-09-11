@@ -171,8 +171,10 @@ if (registerForm) {
     });
 }
 
-    // Logic for the final "Create Account" button (Step 2)
-registerForm.addEventListener('submit', async (e) => {
+// ✅ ADD THIS "IF" CHECK AROUND YOUR CODE
+if (registerForm) {
+  // Logic for the final "Create Account" button (Step 2)
+  registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // FIXED: Using getElementById to correctly get values
