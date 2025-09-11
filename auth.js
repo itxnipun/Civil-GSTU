@@ -91,12 +91,13 @@ if (registerForm) {
     const step2 = document.getElementById('step2');
     const authError = document.getElementById('auth-error');
 
-    // Logic for the "Verify" button (Step 1)
+    // --- LOGIC FOR STEP 1 (VERIFY BUTTON) ---
+    // This is the original code for the "Verify Identity" button.
     if (verifyBtn) {
         verifyBtn.addEventListener('click', async () => {
-            const name = registerForm['register-name'].value;
-            const studentId = registerForm['register-id'].value.toUpperCase();
-            const session = registerForm['register-session'].value;
+            const name = document.getElementById('register-name').value;
+            const studentId = document.getElementById('register-id').value.toUpperCase();
+            const session = document.getElementById('register-session').value;
             
             if (!name || !studentId || !session) {
                 authError.textContent = 'Please fill in your Name, Student ID, and Session.';
@@ -105,7 +106,6 @@ if (registerForm) {
             authError.textContent = 'Verifying...';
 
             try {
-                // This query now checks all three fields
                 const { data: approvedStudent, error } = await supabaseClient
                     .from('approved_students')
                     .select()
@@ -129,16 +129,17 @@ if (registerForm) {
         });
     }
 
-    // Logic for the final "Create Account" button (Step 2)
+    // --- LOGIC FOR STEP 2 (CREATE ACCOUNT BUTTON) ---
+    // This is the corrected code for the final form submission.
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = registerForm['register-name'].value;
-        const studentId = registerForm['register-id'].value.toUpperCase();
-        const email = registerForm['register-email'].value;
-        const password = registerForm['register-password'].value;
-        const confirmPassword = registerForm['confirm-password'].value;
-        const phoneNumber = registerForm['register-number'].value;
-        const photo = registerForm['register-photo'].files[0];
+
+        // FIXED: Using getElementById to correctly get values
+        const studentId = document.getElementById('register-id').value.toUpperCase();
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const phoneNumber = document.getElementById('register-number').value;
 
         if (password !== confirmPassword) {
             authError.textContent = 'Passwords do not match.';
@@ -153,20 +154,13 @@ if (registerForm) {
             if (!authData.user) throw new Error("Could not create user account.");
             const user = authData.user;
 
-            const filePath = `${user.id}/${photo.name}`;
-            const { error: uploadError } = await supabaseClient.storage.from('profile_pictures').upload(filePath, photo);
-            if (uploadError) throw uploadError;
-
-            const { data: urlData } = supabaseClient.storage.from('profile_pictures').getPublicUrl(filePath);
-            
-            const { error: profileError } = await supabaseClient.from('profiles').update({
+            const profileData = {
                 id: user.id,
-                avatar_url: urlData.publicUrl,
                 phone_number: phoneNumber,
                 email: email
-            }).eq('student_id', studentId);
+            };
 
-            if (profileError) throw profileError;
+
             
             window.location.href = 'verify-email.html';
 
@@ -175,6 +169,49 @@ if (registerForm) {
         }
     });
 }
+
+    // Logic for the final "Create Account" button (Step 2)
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // FIXED: Using getElementById to correctly get values
+    const name = document.getElementById('register-name').value;
+    const studentId = document.getElementById('register-id').value.toUpperCase();
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const phoneNumber = document.getElementById('register-number').value;
+
+    if (password !== confirmPassword) {
+        authError.textContent = 'Passwords do not match.';
+        return;
+    }
+
+    authError.textContent = 'Processing... Please wait.';
+
+    try {
+        const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+        if (signUpError) throw signUpError;
+        if (!authData.user) throw new Error("Could not create user account.");
+        const user = authData.user;
+
+        // --- FIXED: Logic to handle optional photo upload ---
+        const profileData = {
+            id: user.id,
+            phone_number: phoneNumber,
+            email: email
+        };
+        
+        // Update the user's profile with all the data
+        const { error: profileError } = await supabaseClient.from('profiles').update(profileData).eq('student_id', studentId);
+        if (profileError) throw profileError;
+        
+        window.location.href = 'verify-email.html';
+
+    } catch (error) {
+        authError.textContent = error.message;
+    }
+});
 
 // --- FORGOT PASSWORD LOGIC ---
 if (forgotPasswordForm) {
@@ -230,4 +267,5 @@ if (updatePasswordForm) {
             }, 3000);
         }
     });
+
 }
