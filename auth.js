@@ -267,4 +267,3 @@ if (updatePasswordForm) {
         }
     });
 }
-
