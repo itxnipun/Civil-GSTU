@@ -12,8 +12,9 @@ const navLinks = document.getElementById('main-nav-links');
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
 const forgotPasswordForm = document.getElementById('forgot-password-form');
+const updatePasswordForm = document.getElementById('update-password-form');
 const authError = document.getElementById('auth-error');
-const authMessage = document.getElementById('auth-message'); // For success messages
+const authMessage = document.getElementById('auth-message');
 
 // --- Navigation Links ---
 const loggedOutLinks = `
@@ -218,10 +219,10 @@ if (forgotPasswordForm) {
     forgotPasswordForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = forgotPasswordForm['forgot-email'].value;
-        
-        authError.textContent = '';
+        if (authError) authError.textContent = '';
         if (authMessage) authMessage.textContent = 'Processing...';
 
+        // This creates a link that will bring the user back to your site
         const resetUrl = window.location.origin + '/update-password.html';
 
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
@@ -230,26 +231,22 @@ if (forgotPasswordForm) {
 
         if (error) {
             if (authMessage) authMessage.textContent = '';
-            authError.textContent = error.message;
+            if (authError) authError.textContent = error.message;
         } else {
             if (authMessage) authMessage.textContent = 'Password reset link sent. Please check your email inbox.';
         }
     });
 }
+
 // --- UPDATE PASSWORD LOGIC ---
-const updatePasswordForm = document.getElementById('update-password-form');
-
 if (updatePasswordForm) {
-    const messageDiv = document.getElementById('auth-message');
-    const errorDiv = document.getElementById('auth-error');
-
     updatePasswordForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const newPassword = document.getElementById('new-password').value;
         const confirmPassword = document.getElementById('confirm-password').value;
 
         if (newPassword !== confirmPassword) {
-            errorDiv.textContent = 'Passwords do not match.';
+            if (authError) authError.textContent = 'Passwords do not match.';
             return;
         }
 
@@ -258,14 +255,14 @@ if (updatePasswordForm) {
         });
 
         if (error) {
-            errorDiv.textContent = 'Error updating password: ' + error.message;
+            if (authError) authError.textContent = 'Error updating password: ' + error.message;
         } else {
-            errorDiv.textContent = '';
-            messageDiv.textContent = 'Password updated successfully! Redirecting to login...';
+            if (authError) authError.textContent = '';
+            if (authMessage) authMessage.textContent = 'Password updated successfully! Redirecting to login...';
             setTimeout(() => {
                 window.location.href = 'login.html';
             }, 3000);
         }
     });
-
 }
+
