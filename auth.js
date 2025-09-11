@@ -185,7 +185,7 @@ if (forgotPasswordForm) {
         authError.textContent = '';
         if (authMessage) authMessage.textContent = 'Processing...';
 
-        const resetUrl = window.location.origin + '/login.html';
+        const resetUrl = window.location.origin + '/update-password.html';
 
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
             redirectTo: resetUrl,
@@ -196,6 +196,38 @@ if (forgotPasswordForm) {
             authError.textContent = error.message;
         } else {
             if (authMessage) authMessage.textContent = 'Password reset link sent. Please check your email inbox.';
+        }
+    });
+}
+// --- UPDATE PASSWORD LOGIC ---
+const updatePasswordForm = document.getElementById('update-password-form');
+
+if (updatePasswordForm) {
+    const messageDiv = document.getElementById('auth-message');
+    const errorDiv = document.getElementById('auth-error');
+
+    updatePasswordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        if (newPassword !== confirmPassword) {
+            errorDiv.textContent = 'Passwords do not match.';
+            return;
+        }
+
+        const { error } = await supabaseClient.auth.updateUser({
+            password: newPassword
+        });
+
+        if (error) {
+            errorDiv.textContent = 'Error updating password: ' + error.message;
+        } else {
+            errorDiv.textContent = '';
+            messageDiv.textContent = 'Password updated successfully! Redirecting to login...';
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 3000);
         }
     });
 }

@@ -291,7 +291,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 2rem;
 }
 .auth-panel.branding-panel {
-    background: linear-gradient(rgba(163, 31, 52, 0.85), rgba(163, 31, 52, 0.85)), url('https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
+    background: linear-gradient(rgba(163, 31, 52, 0.80), rgba(163, 31, 52, 0.75)), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2076&auto=format&fit=crop') no-repeat center center/cover;
     color: white;
     text-align: center;
 }
@@ -530,4 +530,40 @@ h1, h2, h3, h4, h5, h6 {
 
 .notice-pdf-link:hover {
     background-color: #8c1a2b; /* Darker red */
+}
+/* --- Tab Navigation --- */
+.tab-nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.tab-link {
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    color: var(--text-gray);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    border-bottom: 3px solid transparent; /* Important for the active effect */
+    transition: all 0.3s ease;
+    transform: translateY(1px); /* Aligns with the bottom border */
+}
+
+.tab-link:hover {
+    color: var(--text-black);
+}
+
+.tab-link.active {
+    color: var(--mit-red);
+    border-bottom-color: var(--mit-red);
+}
+
+/* --- Tab Content --- */
+.tab-content {
+    display: none; /* Hide all tab content by default */
+}
+
+.tab-content.active {
+    display: block; /* Show only the active tab's content */
 }

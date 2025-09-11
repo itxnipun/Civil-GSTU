@@ -4,8 +4,219 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Dept. of Civil Engineering</title>
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+/* --- Google Fonts & Modern Resets --- */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Roboto:wght@400;700&display=swap');
+
+:root {
+    --mit-red: #A31F34;
+    --text-black: #222222;
+    --text-gray: #555555;
+    --bg-gray: #F9F9F9;
+    --border-gray: #DDDDDD;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #ffffff;
+    color: var(--text-black);
+    line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+    color: var(--text-black);
+    font-weight: 700;
+}
+
+/* --- Split Screen Login Page --- */
+.auth-page-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.auth-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.auth-panel.branding-panel {
+    background: linear-gradient(rgba(163, 31, 52, 0.75), rgba(163, 31, 52, 0.75)), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2076&auto=format&fit=crop') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+}
+
+.branding-panel-content {
+    max-width: 400px;
+}
+
+.branding-panel-content h1 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.branding-panel-content p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.auth-panel.form-panel {
+    background-color: var(--bg-gray);
+}
+
+/* --- Form Styling --- */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #ffffff;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    padding: 2rem;
+    border: 1px solid var(--border-gray);
+    border-radius: 4px;
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-gray);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-container button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--mit-red);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-family: 'Merriweather', serif;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-container button[type="submit"]:hover {
+    background-color: #8c1a2b;
+}
+
+.form-link {
+    text-align: center;
+    margin-top: 1rem;
+    display: block;
+    color: var(--mit-red);
+    text-decoration: none;
+}
+
+.form-link:hover {
+    text-decoration: underline;
+}
+
+#auth-error {
+    color: var(--mit-red);
+    text-align: center;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+/* --- Password Toggle Styles --- */
+.password-input-container {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.password-input-container input {
+    width: 100%;
+    padding: 10px;
+    padding-right: 50px;
+    border: 1px solid var(--border-gray);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none !important;
+    border: none !important;
+    color: #1877f2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+    padding: 4px 8px;
+    width: auto;
+    height: auto;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.password-toggle:hover {
+    background-color: #f2f2f2 !important;
+}
+
+/* --- Back to Home Button --- */
+.back-to-home-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border: 1px solid var(--border-gray);
+    color: var(--text-gray);
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.back-to-home-btn:hover {
+    background-color: var(--mit-red);
+    color: white;
+    border-color: var(--mit-red);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .auth-page-container {
+        flex-direction: column;
+    }
+    .auth-panel.branding-panel {
+        min-height: 300px;
+    }
+}
+    </style>
 </head>
 <body>
     <a href="index.html" class="back-to-home-btn">&larr; Back to Home</a>
@@ -27,7 +238,10 @@
                     </div>
                     <div class="form-group">
                         <label for="login-password">Password</label>
-                        <input type="password" id="login-password" required>
+                        <div class="password-input-container">
+                            <input type="password" id="login-password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword()">Show</button>
+                        </div>
                     </div>
                     <a href="forgot-password.html" class="form-link" style="text-align: right; margin-bottom: 1rem;">Forgot Password?</a>
                     <button type="submit">Login</button>
@@ -36,6 +250,64 @@
             </div>
         </div>
     </div>
-    <script src="auth.js" defer></script>
+
+    <script>
+        // --- Supabase Initialization ---
+        const { createClient } = supabase;
+        const supabaseUrl = 'https://cwubbhcuormtrvyczgpf.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3dWJiaGN1b3JtdHJ2eWN6Z3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQ2MDIsImV4cCI6MjA3Mjk4MDYwMn0.EC-lF_wgrTZxvBpHb_z___45JGHHwX3hKGgQ3juRy5I';
+        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+
+        // --- Password Toggle Function ---
+        function togglePassword() {
+            const passwordInput = document.getElementById('login-password');
+            const toggleBtn = document.querySelector('.password-toggle');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.textContent = 'Show';
+            }
+        }
+
+        // --- Show toggle button only when typing ---
+        document.getElementById('login-password').addEventListener('input', function() {
+            const toggleBtn = document.querySelector('.password-toggle');
+            if (this.value.length > 0) {
+                toggleBtn.style.display = 'block';
+            } else {
+                toggleBtn.style.display = 'none';
+                this.type = 'password';
+                toggleBtn.textContent = 'Show';
+            }
+        });
+
+        // --- Login Logic ---
+        const loginForm = document.getElementById('login-form');
+        const authError = document.getElementById('auth-error');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = loginForm['login-email'].value;
+                const password = loginForm['login-password'].value;
+                
+                const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) {
+                    authError.textContent = error.message;
+                } else {
+                    const { data: { user } } = await supabaseClient.auth.getUser();
+                    if (user && !user.email_confirmed_at) {
+                        await supabaseClient.auth.signOut();
+                        authError.textContent = 'Please verify your email before logging in.';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
