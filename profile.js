@@ -19,6 +19,7 @@ const editButton = document.getElementById('edit-button');
 const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-form');
 const cancelEditButton = document.getElementById('cancel-edit');
+const editAvatarInput = document.getElementById('edit-avatar'); // Added for the file input
 
 /** Updates the profile information on the page */
 function populateProfileData(profile) {
@@ -72,7 +73,7 @@ editButton.addEventListener('click', () => {
     document.getElementById('edit-name').value = currentProfileData.full_name;
     document.getElementById('edit-email').value = currentProfileData.email;
     document.getElementById('edit-phone').value = currentProfileData.phone_number;
-    document.getElementById('edit-image-url').value = currentProfileData.avatar_url;
+    // The image URL field is replaced by a file input, so this line is removed.
     editModal.style.display = 'block';
 });
 
@@ -82,11 +83,36 @@ cancelEditButton.addEventListener('click', () => {
 
 editForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    
+    // Get the file from the input
+    const avatarFile = editAvatarInput.files[0];
+    let avatarUrl = currentProfileData.avatar_url; // Default to existing URL
+    
+    // If a new file was selected, upload it first
+    if (avatarFile) {
+        // Create a unique file path using the user's ID
+        const filePath = `${currentProfileData.user_id}/avatar.jpg`;
+        
+        const { data: uploadData, error: uploadError } = await supabaseClient
+            .storage
+            .from('avatars')
+            .upload(filePath, avatarFile, { upsert: true });
+
+        if (uploadError) {
+            alert('Error uploading file: ' + uploadError.message);
+            return;
+        }
+
+        // Get the public URL for the uploaded image
+        const { data: publicUrlData } = supabaseClient.storage.from('avatars').getPublicUrl(filePath);
+        avatarUrl = publicUrlData.publicUrl;
+    }
+    
     const updatedInfo = {
         full_name: document.getElementById('edit-name').value,
         email: document.getElementById('edit-email').value,
         phone_number: document.getElementById('edit-phone').value,
-        avatar_url: document.getElementById('edit-image-url').value
+        avatar_url: avatarUrl // Use the new or old URL
     };
 
     const { data, error } = await supabaseClient
