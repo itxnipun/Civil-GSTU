@@ -31,9 +31,13 @@ function populateProfileData(profile) {
 }
 
 /** Checks if the logged-in user owns this profile and shows the edit button */
-// To this:
 async function checkOwnership(profileUserId) {
     const { data: { session } } = await supabaseClient.auth.getSession();
+
+    // Diagnostic console logs
+    console.log('Logged-in user ID:', session?.user?.id);
+    console.log('Profile user ID:', profileUserId);
+    
     if (session && session.user && session.user.id === profileUserId) {
         editButton.style.display = 'block';
     }
@@ -42,8 +46,13 @@ async function checkOwnership(profileUserId) {
 /** Fetches and displays a student's profile from the URL ID */
 async function loadStudentProfile(studentId) {
     try {
-        const { data, error } = await supabase.from('profiles').select('*').eq('student_id', studentId).single();
-        if (error) throw error;
+        console.log('Attempting to fetch data for ID:', studentId);
+        const { data, error } = await supabaseClient.from('profiles').select('*').eq('student_id', studentId).single();
+        if (error) {
+            throw error;
+        }
+        
+        console.log('Data successfully fetched:', data);
         
         currentProfileData = data;
         populateProfileData(data);
@@ -52,7 +61,9 @@ async function loadStudentProfile(studentId) {
         loadingMessage.style.display = 'none';
         profileContent.style.display = 'block';
     } catch (error) {
-        // ... (error handling)
+        console.error('Error in loadStudentProfile:', error);
+        loadingMessage.style.display = 'none';
+        // Add more user-friendly error display if needed
     }
 }
 
@@ -99,33 +110,14 @@ editForm.addEventListener('submit', async (event) => {
 function initializePage() {
     const urlParams = new URLSearchParams(window.location.search);
     const studentIdFromUrl = urlParams.get('id');
-    console.log('ID from URL:', studentIdFromUrl); // <--- Add this line
+    console.log('ID from URL:', studentIdFromUrl);
     if (studentIdFromUrl) {
         loadStudentProfile(studentIdFromUrl);
-        /** Fetches and displays a student's profile from the URL ID */
-async function loadStudentProfile(studentId) {
-    try {
-        console.log('Attempting to fetch data for ID:', studentId); // <--- Add this line
-        const { data, error } = await supabaseClient.from('profiles').select('*').eq('student_id', studentId).single();
-        if (error) {
-            throw error;
-        }
-               console.log('Data successfully fetched:', data); // <--- Add this line
-        currentProfileData = data;
-        populateProfileData(data);
-        await checkOwnership(data.user_id);
-        loadingMessage.style.display = 'none';
-        profileContent.style.display = 'block';
-    } catch (error) {
-        // ... (error handling)
-    }
-}
     } else {
-        // ...
+        loadingMessage.style.display = 'none';
+        // Add more user-friendly error display if needed
     }
 }
-
-
 initializePage();
 
 
