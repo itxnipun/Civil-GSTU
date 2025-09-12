@@ -1,265 +1,148 @@
-// profile.js
+// This is a standard JavaScript file (.js)
 
-// Assumes window.supabaseClient already exists from auth.js
-if (typeof supabaseClient === 'undefined') {
-  console.error('supabaseClient is not initialized. Ensure auth.js runs before profile.js');
-}
+// --- Configuration ---
+const SUPABASE_URL = 'https://cwubbhcuormtrvyczgpf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3dWJiaGN1b3JtdHJ2eWN6Z3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQ2MDIsImV4cCI6MjA3Mjk4MDYwMn0.EC-lF_wgrTZxvBpHb_z___45JGHHwX3hKGgQ3juRy5I';
+// --- Initialize Supabase Client ---
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let currentProfileData = null; // Holds data for the currently viewed profile
 
-// DOM elements
+// --- Get All HTML Elements ---
 const loadingMessage = document.getElementById('loading-message');
 const profileContent = document.getElementById('profile-content');
-const errorMessage = document.getElementById('error-message');
-
-const imgEl = document.getElementById('student-image');
-const nameEl = document.getElementById('student-name');
-const idEl = document.getElementById('student-id');
-const emailEl = document.getElementById('student-email');
-const phoneEl = document.getElementById('student-number');
-
+const studentImage = document.getElementById('student-image');
+const studentName = document.getElementById('student-name');
+const studentIdEl = document.getElementById('student-id');
+const studentEmail = document.getElementById('student-email');
+const studentNumber = document.getElementById('student-number');
 const editButton = document.getElementById('edit-button');
 const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-form');
-const editName = document.getElementById('edit-name');
-const editEmail = document.getElementById('edit-email');
-const editPhone = document.getElementById('edit-phone');
-const editAvatar = document.getElementById('edit-avatar');
-const cancelEdit = document.getElementById('cancel-edit');
+const cancelEditButton = document.getElementById('cancel-edit');
+const editAvatarInput = document.getElementById('edit-avatar'); // New file input
 
-// State
-let currentProfileData = null;
-let currentUser = null;
-
-// Utils
-function getQueryParam(key) {
-  const params = new URLSearchParams(window.location.search);
-  return params.get(key);
+/** Updates the profile information on the page */
+function populateProfileData(profile) {
+    studentImage.src = profile.avatar_url || 'https://placehold.co/150';
+    studentName.textContent = profile.full_name;
+    studentIdEl.textContent = `Student ID: ${profile.student_id}`;
+    studentEmail.textContent = `Email: ${profile.email || 'N/A'}`;
+    studentNumber.textContent = `Number: ${profile.phone_number || 'N/A'}`;
+    document.title = `${profile.full_name} | Profile`;
 }
 
-function showError(text) {
-  if (loadingMessage) loadingMessage.style.display = 'none';
-  errorMessage.style.display = 'block';
-  errorMessage.textContent = text;
-}
-
-function showProfile() {
-  if (loadingMessage) loadingMessage.style.display = 'none';
-  profileContent.style.display = 'block';
-}
-
-function placeholderFor(id) {
-  // neutral placeholder with student id text
-  return `https://placehold.co/400x400/cccccc/333333/png?text=${encodeURIComponent(id || 'No+Image')}`;
-}
-
-// Wait for initial session if needed (removes "minutes" delay)
-async function getReadySession() {
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (session) return session;
-
-  return new Promise((resolve) => {
-    const { data: subscription } = supabaseClient.auth.onAuthStateChange((event, newSession) => {
-      if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        subscription.subscription.unsubscribe();
-        resolve(newSession || null);
-      }
-    });
-  });
-}
-
-// Ownership check supports three ways:
-// - profiles.id equals auth.uid()  (recommended schema)
-// - profiles.user_id equals auth.uid() (if you have user_id column)
-// - student_id equals user_metadata.student_id (fallback)
-async function checkOwnership(profile, session) {
-  try {
-    const uid = session?.user?.id;
-    const metaStudentId = session?.user?.user_metadata?.student_id;
-
-    const matchesById = Boolean(uid && profile?.id && uid === profile.id);
-    const matchesByUserId = Boolean(uid && profile?.user_id && uid === profile.user_id);
-    const matchesByStudentId = Boolean(metaStudentId && profile?.student_id && metaStudentId === profile.student_id);
-
-    if (matchesById || matchesByUserId || matchesByStudentId) {
-      editButton.style.display = 'block';
-      currentUser = session.user;
-      console.log('Ownership OK:', { matchesById, matchesByUserId, matchesByStudentId });
-    } else {
-      editButton.style.display = 'none';
-      console.log('Ownership failed for this profile.', {
-        uid, profile_id: profile?.id, profile_user_id: profile?.user_id,
-        profile_student_id: profile?.student_id, metaStudentId
-      });
+/** Checks if the logged-in user owns this profile and shows the edit button */
+async function checkOwnership(profileUserId) {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session && session.user && session.user.id === profileUserId) {
+        editButton.style.display = 'block';
     }
-  } catch (err) {
-    console.error('checkOwnership error:', err);
-    editButton.style.display = 'none';
-  }
 }
 
-// Load profile by student_id from URL
-async function loadStudentProfile() {
-  try {
-    const studentId = (getQueryParam('id') || '').toUpperCase().trim();
-    if (!studentId) {
-      showError('No student ID provided in the URL.');
-      return;
+/** Fetches and displays a student's profile from the URL ID */
+async function loadStudentProfile(studentId) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('*, user_id')
+            .eq('student_id', studentId)
+            .single();
+
+        if (error) throw error;
+        
+        currentProfileData = data;
+        populateProfileData(data);
+        await checkOwnership(data.user_id);
+
+        loadingMessage.style.display = 'none';
+        profileContent.style.display = 'block';
+    } catch (error) {
+        console.error('Error in loadStudentProfile:', error);
+        loadingMessage.style.display = 'none';
     }
+}
 
-    // Fetch the profile row
-    const { data, error } = await supabaseClient
-      .from('profiles')
-      .select('*')
-      .eq('student_id', studentId)
-      .single();
+// Event Listeners for the Edit Modal
+editButton.addEventListener('click', () => {
+    document.getElementById('edit-name').value = currentProfileData.full_name;
+    document.getElementById('edit-email').value = currentProfileData.email;
+    document.getElementById('edit-phone').value = currentProfileData.phone_number;
+    editModal.style.display = 'block';
+});
 
-    if (error || !data) {
-      console.error('Error loading profile:', error);
-      showError('Profile not found.');
-      return;
+cancelEditButton.addEventListener('click', () => {
+    editModal.style.display = 'none';
+});
+
+editForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    // Get the file from the input
+    const avatarFile = editAvatarInput.files[0];
+    let avatarUrl = currentProfileData.avatar_url; // Default to existing URL
+    
+    // If a new file was selected, upload it first
+    if (avatarFile) {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const user = session?.user;
+        if (!user) {
+            alert('You must be logged in to upload a profile picture.');
+            return;
+        }
+
+        // Create a unique file path using the logged-in user's ID
+        const filePath = `${user.id}/avatar.jpg`;
+        
+        const { data: uploadData, error: uploadError } = await supabaseClient
+            .storage
+            .from('avatars')
+            .upload(filePath, avatarFile, { upsert: true });
+
+        if (uploadError) {
+            alert('Error uploading file: ' + uploadError.message);
+            return;
+        }
+
+        // Get the public URL for the uploaded image
+        const { data: publicUrlData } = supabaseClient.storage.from('avatars').getPublicUrl(filePath);
+        avatarUrl = publicUrlData.publicUrl;
     }
-
-    currentProfileData = data;
-
-    // Fill UI
-    imgEl.src = data.avatar_url || placeholderFor(data.student_id);
-    imgEl.alt = `Photo of ${data.full_name || data.student_id}`;
-
-    nameEl.textContent = data.full_name || 'Unnamed Student';
-    idEl.textContent = `Student ID: ${data.student_id}`;
-    emailEl.textContent = `Email: ${data.email || 'N/A'}`;
-    phoneEl.textContent = `Number: ${data.phone_number || 'N/A'}`;
-
-    // Get ready session and check ownership (no delay)
-    const session = await getReadySession();
-    await checkOwnership(currentProfileData, session);
-
-    showProfile();
-  } catch (err) {
-    console.error(err);
-    showError('An unexpected error occurred loading the profile.');
-  }
-}
-
-// Open/close modal
-function openEditModal() {
-  if (!currentProfileData) return;
-  editName.value = currentProfileData.full_name || '';
-  editEmail.value = currentProfileData.email || '';
-  editPhone.value = currentProfileData.phone_number || '';
-  editAvatar.value = '';
-  editModal.style.display = 'block';
-}
-
-function closeEditModal() {
-  editModal.style.display = 'none';
-}
-
-// Upload avatar with two-path strategy (folder or root) for policy compatibility
-async function uploadAvatarIfProvided(userId) {
-  const file = editAvatar.files?.[0];
-  if (!file) return null; // no change
-
-  if (!file.type.startsWith('image/')) {
-    throw new Error('Please upload a valid image file.');
-  }
-  const maxBytes = 5 * 1024 * 1024;
-  if (file.size > maxBytes) {
-    throw new Error('Image must be 5MB or less.');
-  }
-
-  const bucket = 'profile_pictures'; // your existing bucket
-  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-  const base = `avatar_${Date.now()}.${ext}`;
-  const pathWithFolder = `${userId}/${base}`;
-  const pathRoot = `${userId}_avatar_${Date.now()}.${ext}`;
-
-  // Try folder-first (secure setups), then fall back to root if RLS allows only root
-  let usedPath = pathWithFolder;
-
-  let { error: uploadError } = await supabaseClient.storage
-    .from(bucket)
-    .upload(usedPath, file, { upsert: true, contentType: file.type });
-
-  if (uploadError) {
-    console.warn('Folder upload failed, trying root path...', uploadError?.message);
-    usedPath = pathRoot;
-    const retry = await supabaseClient.storage
-      .from(bucket)
-      .upload(usedPath, file, { upsert: true, contentType: file.type });
-    uploadError = retry.error;
-  }
-
-  if (uploadError) {
-    throw uploadError;
-  }
-
-  const { data: pub } = supabaseClient.storage.from(bucket).getPublicUrl(usedPath);
-  return pub?.publicUrl || null;
-}
-
-// Handle form submit
-async function submitEditForm(e) {
-  e.preventDefault();
-  try {
-    if (!currentUser || !currentProfileData) {
-      throw new Error('Not authorized to edit this profile.');
-    }
-
+    
     const updatedInfo = {
-      full_name: editName.value.trim(),
-      email: editEmail.value.trim(),
-      phone_number: editPhone.value.trim(),
-      updated_at: new Date().toISOString()
+        full_name: document.getElementById('edit-name').value,
+        email: document.getElementById('edit-email').value,
+        phone_number: document.getElementById('edit-phone').value,
+        avatar_url: avatarUrl // Use the new or old URL
     };
 
-    // Upload avatar if provided
-    const avatarUrl = await uploadAvatarIfProvided(currentUser.id);
-    if (avatarUrl) {
-      updatedInfo.avatar_url = avatarUrl;
-    }
-
-    // Update the profile row where profiles.id = auth.uid()
     const { data, error } = await supabaseClient
-      .from('profiles')
-      .update(updatedInfo)
-      .eq('id', currentUser.id)
-      .select()
-      .single();
+        .from('profiles')
+        .update(updatedInfo)
+        .eq('student_id', currentProfileData.student_id)
+        .select()
+        .single();
 
     if (error) {
-      console.error('Update failed:', error);
-      throw new Error(error.message || 'Failed to update profile.');
+        alert('Error updating profile: ' + error.message);
+    } else {
+        alert('Profile updated successfully!');
+        currentProfileData = data;
+        populateProfileData(data);
+        editModal.style.display = 'none';
     }
+});
 
-    // Update UI with new values
-    currentProfileData = data;
-    imgEl.src = data.avatar_url || imgEl.src;
-    nameEl.textContent = data.full_name || nameEl.textContent;
-    emailEl.textContent = `Email: ${data.email || 'N/A'}`;
-    phoneEl.textContent = `Number: ${data.phone_number || 'N/A'}`;
-
-    closeEditModal();
-    alert('Profile updated successfully!');
-  } catch (err) {
-    console.error(err);
-    alert(err.message || 'Could not update profile.');
-  }
+/** Main function to run when the page loads */
+function initializePage() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentIdFromUrl = urlParams.get('id');
+    if (studentIdFromUrl) {
+        loadStudentProfile(studentIdFromUrl);
+    } else {
+        loadingMessage.style.display = 'none';
+    }
 }
+initializePage();
 
-// Event wiring
-document.addEventListener('DOMContentLoaded', loadStudentProfile);
-editButton.addEventListener('click', openEditModal);
-cancelEdit.addEventListener('click', closeEditModal);
 
-// Close modal when clicking outside content
-window.addEventListener('click', (e) => {
-  if (e.target === editModal) closeEditModal();
-});
 
-// Re-check ownership on auth events to handle session refresh/initialization
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  console.log('Auth state:', event, session?.user?.id);
-  if (currentProfileData && ['INITIAL_SESSION','SIGNED_IN','TOKEN_REFRESHED'].includes(event)) {
-    checkOwnership(currentProfileData, session);
-  }
-});
