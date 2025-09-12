@@ -164,13 +164,27 @@ if (registerForm) {
             if (!authData.user) throw new Error("Could not create user account.");
             const user = authData.user;
 
-            const profileData = {
-                id: user.id,
-                phone_number: phoneNumber,
-                email: email
-            };
+            // Create profile in database
+const fullName = document.getElementById('register-name').value;
+const session = document.getElementById('register-session').value;
 
-            window.location.href = 'verify-email.html';
+const { error: profileError } = await supabaseClient
+    .from('profiles')
+    .insert({
+        id: user.id,  // Your table uses 'id' not 'user_id'
+        student_id: studentId,
+        full_name: fullName,
+        email: email,
+        phone_number: phoneNumber,
+        session: session
+    });
+
+if (profileError) {
+    console.error('Profile creation failed:', profileError);
+    // Continue anyway - admin can fix later
+}
+
+window.location.href = 'verify-email.html';
 
         } catch (error) {
             authError.textContent = error.message;
@@ -229,4 +243,5 @@ if (updatePasswordForm) {
         }
     });
 }
+
 
