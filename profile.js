@@ -105,7 +105,7 @@ function initializePage() {
 async function loadStudentProfile(studentId) {
     try {
         console.log('Attempting to fetch data for ID:', studentId); // <--- Add this line
-        const { data, error } = await supabase.from('profiles').select('*').eq('student_id', studentId).single();
+        const { data, error } = await supabaseClient.from('profiles').select('*').eq('student_id', studentId).single();
         if (error) {
             throw error;
         }
@@ -126,3 +126,4 @@ async function loadStudentProfile(studentId) {
 
 
 initializePage();
+
