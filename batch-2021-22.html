@@ -1,10 +1,8 @@
 <script src="auth.js"></script>
     <script src="auth-guard.js"></script>
     <script>
-        // Initialize Supabase (ADD THIS - MISSING IN YOUR CODE)
-        const SUPABASE_URL = 'https://cwubbhcuormtrvyczgpf.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3dWJiaGN1b3JtdHJ2eWN6Z3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQ2MDIsImV4cCI6MjA3Mjk4MDYwMn0.EC-lF_wgrTZxvBpHb_z___45JGHHwX3hKGgQ3juRy5I';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Don't create a new supabaseClient - use the one from auth.js
+        // Your auth.js already creates: const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Global variables
         let currentUser = null;
@@ -33,6 +31,8 @@
                 const { data: { session } } = await supabaseClient.auth.getSession();
                 
                 if (session && session.user) {
+                    console.log('User session found:', session.user.id);
+                    
                     // Get the student profile for this user
                     const { data: profile, error } = await supabaseClient
                         .from('profiles')
@@ -47,10 +47,10 @@
                             full_name: profile.full_name,
                             email: profile.email
                         };
-                        console.log('Current user:', currentUser);
+                        console.log('Current user profile:', currentUser);
                         updateUserDisplay();
                     } else {
-                        console.log('No profile found for user');
+                        console.log('No profile found for user:', error);
                         showLoginPrompt();
                     }
                 } else {
@@ -179,7 +179,7 @@
             showMessage('Edit cancelled', 'info');
         }
 
-        // Save student - FIXED VERSION WITH PROPER RLS HANDLING
+        // Save student
         async function saveStudent(studentId) {
             if (!currentUser) {
                 showMessage('You must be logged in to edit profiles', 'error');
@@ -230,8 +230,8 @@
                 const { data, error } = await supabaseClient
                     .from('profiles')
                     .update(updatedData)
-                    .eq('user_id', currentUser.id)  // Use user_id for RLS
-                    .eq('student_id', studentId)    // Double check student_id
+                    .eq('user_id', currentUser.id)
+                    .eq('student_id', studentId)
                     .select()
                     .single();
 
@@ -277,23 +277,30 @@
             }, 5000);
         }
 
-        // Initialize page
-        async function initializePage() {
-            console.log('Initializing batch page...');
-            await checkCurrentUser();
-            await loadStudents();
-        }
-
-        // Listen for auth state changes
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-            console.log('Auth state changed:', event);
-            if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
-                setTimeout(() => {
-                    initializePage();
-                }, 100);
-            }
+        // Wait for DOM to load and auth.js to initialize supabaseClient
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Small delay to ensure auth.js has fully loaded
+            setTimeout(async () => {
+                if (typeof supabaseClient !== 'undefined') {
+                    console.log('Supabase client found, initializing page...');
+                    await checkCurrentUser();
+                    await loadStudents();
+                } else {
+                    console.error('Supabase client not found');
+                }
+            }, 100);
         });
 
-        // Start the page
-        initializePage();
+        // Listen for auth state changes from your existing auth.js
+        // This will refresh the page content when user logs in/out
+        if (typeof supabaseClient !== 'undefined') {
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+                console.log('Auth state changed on batch page:', event);
+                if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+                    setTimeout(() => {
+                        checkCurrentUser();
+                    }, 200);
+                }
+            });
+        }
     </script>
