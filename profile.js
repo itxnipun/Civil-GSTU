@@ -3,11 +3,11 @@
 // --- Configuration ---
 const SUPABASE_URL = 'https://cwubbhcuormtrvyczgpf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3dWJiaGN1b3JtdHJ2eWN6Z3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQ2MDIsImV4cCI6MjA3Mjk4MDYwMn0.EC-lF_wgrTZxvBpHb_z___45JGHHwX3hKGgQ3juRy5I';
+// --- Initialize Supabase Client ---
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 let currentProfileData = null; // Holds data for the currently viewed profile
 
-// Get all necessary HTML elements
+// --- Get All HTML Elements ---
 const loadingMessage = document.getElementById('loading-message');
 const profileContent = document.getElementById('profile-content');
 const studentImage = document.getElementById('student-image');
@@ -19,7 +19,7 @@ const editButton = document.getElementById('edit-button');
 const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-form');
 const cancelEditButton = document.getElementById('cancel-edit');
-const editAvatarInput = document.getElementById('edit-avatar'); // Added for the file input
+const editAvatarInput = document.getElementById('edit-avatar'); // New file input
 
 /** Updates the profile information on the page */
 function populateProfileData(profile) {
@@ -34,11 +34,6 @@ function populateProfileData(profile) {
 /** Checks if the logged-in user owns this profile and shows the edit button */
 async function checkOwnership(profileUserId) {
     const { data: { session } } = await supabaseClient.auth.getSession();
-
-    // Diagnostic console logs
-    console.log('Logged-in user ID:', session?.user?.id);
-    console.log('Profile user ID:', profileUserId);
-    
     if (session && session.user && session.user.id === profileUserId) {
         editButton.style.display = 'block';
     }
@@ -47,13 +42,13 @@ async function checkOwnership(profileUserId) {
 /** Fetches and displays a student's profile from the URL ID */
 async function loadStudentProfile(studentId) {
     try {
-        console.log('Attempting to fetch data for ID:', studentId);
-        const { data, error } = await supabaseClient.from('profiles').select('*').eq('student_id', studentId).single();
-        if (error) {
-            throw error;
-        }
-        
-        console.log('Data successfully fetched:', data);
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('*, user_id')
+            .eq('student_id', studentId)
+            .single();
+
+        if (error) throw error;
         
         currentProfileData = data;
         populateProfileData(data);
@@ -64,7 +59,6 @@ async function loadStudentProfile(studentId) {
     } catch (error) {
         console.error('Error in loadStudentProfile:', error);
         loadingMessage.style.display = 'none';
-        // Add more user-friendly error display if needed
     }
 }
 
@@ -73,7 +67,6 @@ editButton.addEventListener('click', () => {
     document.getElementById('edit-name').value = currentProfileData.full_name;
     document.getElementById('edit-email').value = currentProfileData.email;
     document.getElementById('edit-phone').value = currentProfileData.phone_number;
-    // The image URL field is replaced by a file input, so this line is removed.
     editModal.style.display = 'block';
 });
 
@@ -90,8 +83,15 @@ editForm.addEventListener('submit', async (event) => {
     
     // If a new file was selected, upload it first
     if (avatarFile) {
-        // Create a unique file path using the user's ID
-        const filePath = `${currentProfileData.user_id}/avatar.jpg`;
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        const user = session?.user;
+        if (!user) {
+            alert('You must be logged in to upload a profile picture.');
+            return;
+        }
+
+        // Create a unique file path using the logged-in user's ID
+        const filePath = `${user.id}/avatar.jpg`;
         
         const { data: uploadData, error: uploadError } = await supabaseClient
             .storage
@@ -136,14 +136,13 @@ editForm.addEventListener('submit', async (event) => {
 function initializePage() {
     const urlParams = new URLSearchParams(window.location.search);
     const studentIdFromUrl = urlParams.get('id');
-    console.log('ID from URL:', studentIdFromUrl);
     if (studentIdFromUrl) {
         loadStudentProfile(studentIdFromUrl);
     } else {
         loadingMessage.style.display = 'none';
-        // Add more user-friendly error display if needed
     }
 }
 initializePage();
+
 
 
