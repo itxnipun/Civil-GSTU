@@ -1,208 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batch 2021-22 - Dept. of Civil Engineering</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        /* Additional styles for editable cards */
-        .profile-card {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .profile-card.editable {
-            border: 2px solid #4CAF50;
-            background-color: #f8fff8;
-        }
-        
-        .edit-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #4CAF50;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 10;
-        }
-        
-        .profile-card.editing .profile-link {
-            pointer-events: none; /* Disable link when editing */
-        }
-        
-        .edit-form {
-            display: none;
-            padding: 1rem;
-            background: white;
-            border-radius: 8px;
-            margin-top: 1rem;
-        }
-        
-        .edit-form.active {
-            display: block;
-        }
-        
-        .edit-form input {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .edit-buttons {
-            margin-top: 15px;
-            text-align: center;
-        }
-        
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 0 5px;
-            transition: background-color 0.2s;
-        }
-        
-        .btn-edit {
-            background: #2196F3;
-            color: white;
-        }
-        
-        .btn-edit:hover {
-            background: #1976D2;
-        }
-        
-        .btn-save {
-            background: #4CAF50;
-            color: white;
-        }
-        
-        .btn-save:hover {
-            background: #45a049;
-        }
-        
-        .btn-cancel {
-            background: #f44336;
-            color: white;
-        }
-        
-        .btn-cancel:hover {
-            background: #d32f2f;
-        }
-        
-        .btn-view {
-            background: #FF9800;
-            color: white;
-        }
-        
-        .btn-view:hover {
-            background: #F57C00;
-        }
-        
-        .current-user-info {
-            background: #e8f5e8;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .login-prompt {
-            background: #fff3cd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            border-left: 4px solid #ffc107;
-        }
-        
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
-            text-align: center;
-        }
-        
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 4px;
-            margin: 10px 0;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <a href="index.html" class="logo">
-            <img src="images/logo.png" alt="Department of Civil Engineering Logo">
-        </a>
-        <ul class="nav-links" id="main-nav-links"></ul>
-    </nav>
-    
-    <div class="container">
-        <div class="page-header">
-            <h1>Students of Session 2021-22</h1>
-        </div>
-        
-        <!-- Current User Display -->
-        <div id="current-user-display"></div>
-        
-        <div class="tab-nav">
-            <a href="#" class="tab-link active" onclick="showTab(event, 'students')">Student List</a>
-            <a href="#" class="tab-link" onclick="showTab(event, 'advisor')">Batch Advisor</a>
-            <a href="#" class="tab-link" onclick="showTab(event, 'schedule')">Class Schedule</a>
-            <a href="#" class="tab-link" onclick="showTab(event, 'contents')">Class Contents</a>
-        </div>
-        
-        <div id="students" class="tab-content active">
-            <h2>Full Student List</h2>
-            <div id="messages"></div>
-            <div class="profile-grid" id="student-grid">
-                <p>Loading students...</p>
-            </div>
-        </div>
-        
-        <div id="advisor" class="tab-content">
-            <h2>Batch Advisor</h2>
-            <div class="profile-card" style="max-width: 350px; margin: auto;">
-                <img src="images/md-mahmudun-nabi.jpg" alt="Photo of Batch Advisor">
-                <h3>Md. Mahmudun Nabi</h3>
-                <p class="title">Batch Advisor</p>
-            </div>
-        </div>
-        
-        <div id="schedule" class="tab-content">
-            <h2>Class Schedule (Routine)</h2>
-            <p style="text-align:center;">Schedule for this batch will be updated soon.</p>
-        </div>
-        
-        <div id="contents" class="tab-content">
-            <h2>Class Contents & Resources</h2>
-            <p style="text-align:center;">Resources for this batch will be uploaded soon.</p>
-        </div>
-    </div>
-    
-    <footer class="footer">
-        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
-        <p>Gopalganj-8105, Bangladesh</p>
-    </footer>
-
-    <script src="auth.js"></script>
+<script src="auth.js"></script>
     <script src="auth-guard.js"></script>
     <script>
+        // Initialize Supabase (ADD THIS - MISSING IN YOUR CODE)
+        const SUPABASE_URL = 'https://cwubbhcuormtrvyczgpf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3dWJiaGN1b3JtdHJ2eWN6Z3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQ2MDIsImV4cCI6MjA3Mjk4MDYwMn0.EC-lF_wgrTZxvBpHb_z___45JGHHwX3hKGgQ3juRy5I';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // Global variables
         let currentUser = null;
         let students = [];
@@ -226,28 +29,36 @@
 
         // Check authentication and get current user
         async function checkCurrentUser() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            
-            if (session && session.user) {
-                // Get the student profile for this user
-                const { data: profile, error } = await supabaseClient
-                    .from('profiles')
-                    .select('*')
-                    .eq('user_id', session.user.id)
-                    .single();
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
                 
-                if (profile && !error) {
-                    currentUser = {
-                        id: session.user.id,
-                        student_id: profile.student_id,
-                        full_name: profile.full_name,
-                        email: profile.email
-                    };
-                    updateUserDisplay();
+                if (session && session.user) {
+                    // Get the student profile for this user
+                    const { data: profile, error } = await supabaseClient
+                        .from('profiles')
+                        .select('*')
+                        .eq('user_id', session.user.id)
+                        .single();
+                    
+                    if (profile && !error) {
+                        currentUser = {
+                            id: session.user.id,
+                            student_id: profile.student_id,
+                            full_name: profile.full_name,
+                            email: profile.email
+                        };
+                        console.log('Current user:', currentUser);
+                        updateUserDisplay();
+                    } else {
+                        console.log('No profile found for user');
+                        showLoginPrompt();
+                    }
                 } else {
+                    console.log('No authenticated user');
                     showLoginPrompt();
                 }
-            } else {
+            } catch (error) {
+                console.error('Error checking current user:', error);
                 showLoginPrompt();
             }
         }
@@ -294,6 +105,7 @@
                 if (error) throw error;
 
                 students = data || [];
+                console.log('Loaded students:', students.length);
                 displayStudents();
             } catch (error) {
                 console.error('Error fetching students:', error);
@@ -322,7 +134,7 @@
                     ${isEditable ? '<div class="edit-badge">Your Profile</div>' : ''}
                     
                     <a href="profile.html?id=${student.student_id}" class="profile-link" style="text-decoration: none; color: inherit; display: block;">
-                        <img loading="lazy" src="${student.avatar_url || `https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}`}" alt="Photo of ${student.full_name}">
+                        <img loading="lazy" src="${student.avatar_url || `https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}`}" alt="Photo of ${student.full_name}" onerror="this.src='https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}'">
                         <h3>${student.full_name}</h3>
                         <p><strong>Student ID:</strong> ${student.student_id}</p>
                         <p><strong>Email:</strong> ${student.email || 'N/A'}</p>
@@ -367,15 +179,30 @@
             showMessage('Edit cancelled', 'info');
         }
 
-        // Save student
+        // Save student - FIXED VERSION WITH PROPER RLS HANDLING
         async function saveStudent(studentId) {
+            if (!currentUser) {
+                showMessage('You must be logged in to edit profiles', 'error');
+                return;
+            }
+
             const student = students.find(s => s.student_id === studentId);
-            if (!student) return;
+            if (!student) {
+                showMessage('Student not found', 'error');
+                return;
+            }
+
+            // Check if user owns this profile
+            if (currentUser.student_id !== studentId) {
+                showMessage('You can only edit your own profile', 'error');
+                return;
+            }
 
             const updatedData = {
                 full_name: document.getElementById(`edit-name-${studentId}`).value.trim(),
                 email: document.getElementById(`edit-email-${studentId}`).value.trim(),
-                phone_number: document.getElementById(`edit-phone-${studentId}`).value.trim()
+                phone_number: document.getElementById(`edit-phone-${studentId}`).value.trim(),
+                updated_at: new Date().toISOString()
             };
 
             // Validate required fields
@@ -389,15 +216,36 @@
                 return;
             }
 
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(updatedData.email)) {
+                showMessage('Please enter a valid email address', 'error');
+                return;
+            }
+
             try {
+                console.log('Updating student profile:', { studentId, updatedData });
+
+                // Update using user_id for RLS compliance
                 const { data, error } = await supabaseClient
                     .from('profiles')
                     .update(updatedData)
-                    .eq('student_id', studentId)
+                    .eq('user_id', currentUser.id)  // Use user_id for RLS
+                    .eq('student_id', studentId)    // Double check student_id
                     .select()
                     .single();
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Update error:', error);
+                    
+                    if (error.message.includes('row-level security policy')) {
+                        throw new Error('You do not have permission to edit this profile');
+                    }
+                    
+                    throw new Error('Failed to update profile: ' + error.message);
+                }
+
+                console.log('Profile updated successfully:', data);
 
                 // Update local data
                 const studentIndex = students.findIndex(s => s.student_id === studentId);
@@ -411,7 +259,7 @@
 
             } catch (error) {
                 console.error('Error updating profile:', error);
-                showMessage('Error updating profile: ' + error.message, 'error');
+                showMessage(error.message, 'error');
             }
         }
 
@@ -431,12 +279,14 @@
 
         // Initialize page
         async function initializePage() {
+            console.log('Initializing batch page...');
             await checkCurrentUser();
             await loadStudents();
         }
 
         // Listen for auth state changes
         supabaseClient.auth.onAuthStateChange((event, session) => {
+            console.log('Auth state changed:', event);
             if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
                 setTimeout(() => {
                     initializePage();
@@ -447,5 +297,3 @@
         // Start the page
         initializePage();
     </script>
-</body>
-</html>
