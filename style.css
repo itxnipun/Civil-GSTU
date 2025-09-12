@@ -567,3 +567,9 @@ h1, h2, h3, h4, h5, h6 {
 .tab-content.active {
     display: block; /* Show only the active tab's content */
 }
+/* Removes the default underline and color from the profile links */
+.profile-link {
+    text-decoration: none;
+    color: inherit;
+    display: block; /* Makes the entire card area clickable */
+}

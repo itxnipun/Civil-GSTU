@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Styles for the Profile Page and Edit Modal */
+        .profile-container {
+            max-width: 600px; margin: 50px auto; padding: 30px;
+            background-color: #fff; border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center;
+        }
+        .profile-image {
+            width: 150px; height: 150px; border-radius: 50%;
+            object-fit: cover; border: 5px solid #f0f0f0; margin-bottom: 20px;
+        }
+        .modal {
+            display: none; position: fixed; z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe; margin: 15% auto; padding: 20px;
+            border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 8px;
+        }
+        .modal-content input {
+            width: 100%; padding: 8px; margin: 10px 0; box-sizing: border-box;
+        }
+        #edit-button {
+            margin-top: 20px; padding: 10px 20px; cursor: pointer; display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div id="loading-message">Loading Profile... ⏳</div>
+        <div id="profile-content" style="display: none;">
+            <img src="" alt="Student Profile Picture" id="student-image" class="profile-image">
+            <div class="profile-info">
+                <h1 id="student-name"></h1>
+                <p id="student-id"></p>
+                <p id="student-email"></p>
+                <p id="student-number"></p>
+            </div>
+            <button id="edit-button">Edit Profile</button>
+        </div>
+        <div id="error-message" style="display: none; color: red;"></div>
+    </div>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Your Profile</h2>
+            <form id="edit-form">
+                <label for="edit-name">Name:</label>
+                <input type="text" id="edit-name" required>
+
+                <label for="edit-email">Email:</label>
+                <input type="email" id="edit-email" required>
+
+                <label for="edit-phone">Number:</label>
+                <input type="tel" id="edit-phone" required>
+                
+                <label for="edit-image-url">Profile Picture URL:</label>
+                <input type="url" id="edit-image-url" required>
+
+                <button type="submit">Save Changes</button>
+                <button type="button" id="cancel-edit">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="profile.js"></script>
+</body>
+</html>

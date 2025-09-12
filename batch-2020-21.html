@@ -10,8 +10,8 @@
 <body>
     <nav class="navbar">
         <a href="index.html" class="logo">
-    <img src="images/logo.png" alt="Department of Civil Engineering Logo">
-</a>
+            <img src="images/logo.png" alt="Department of Civil Engineering Logo">
+        </a>
         <ul class="nav-links" id="main-nav-links"></ul>
     </nav>
     <div class="container">
@@ -72,7 +72,17 @@
             }
             studentGrid.innerHTML = '';
             data.forEach(student => {
-                const cardHTML = `<div class="profile-card"><img loading="lazy" src="${student.avatar_url || `https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}`}" alt="Photo of ${student.full_name}"><h3>${student.full_name}</h3><p><strong>Student ID:</strong> ${student.student_id}</p><p><strong>Email:</strong> ${student.email || 'N/A'}</p><p><strong>Number:</strong> ${student.phone_number || 'N/A'}</p></div>`;
+                // This block is now corrected, with the duplication removed.
+                const cardHTML = `
+                    <div class="profile-card">
+                        <a href="profile.html?id=${student.student_id}" style="text-decoration: none; color: inherit;">
+                            <img loading="lazy" src="${student.avatar_url || `https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}`}" alt="Photo of ${student.full_name}">
+                            <h3>${student.full_name}</h3>
+                            <p><strong>Student ID:</strong> ${student.student_id}</p>
+                            <p><strong>Email:</strong> ${student.email || 'N/A'}</p>
+                            <p><strong>Number:</strong> ${student.phone_number || 'N/A'}</p>
+                        </a>
+                    </div>`;
                 studentGrid.innerHTML += cardHTML;
             });
         }

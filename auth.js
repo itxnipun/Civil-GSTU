@@ -5,7 +5,7 @@ const { createClient } = supabase;
 // PASTE YOUR SUPABASE URL AND ANON KEY HERE!
 const supabaseUrl = 'https://cwubbhcuormtrvyczgpf.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN3dWJiaGN1b3JtdHJ2eWN6Z3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQ2MDIsImV4cCI6MjA3Mjk4MDYwMn0.EC-lF_wgrTZxvBpHb_z___45JGHHwX3hKGgQ3juRy5I';
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
+const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // --- DOM Elements ---
 const navLinks = document.getElementById('main-nav-links');
@@ -150,7 +150,16 @@ if (registerForm) {
         authError.textContent = 'Processing... Please wait.';
 
         try {
-            const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+            const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({
+    email,
+    password,
+    options: {
+        data: {
+            // This attaches the verified student ID to the new user's account
+            student_id: studentId 
+        }
+    }
+});
             if (signUpError) throw signUpError;
             if (!authData.user) throw new Error("Could not create user account.");
             const user = authData.user;
@@ -161,8 +170,6 @@ if (registerForm) {
                 email: email
             };
 
-
-            
             window.location.href = 'verify-email.html';
 
         } catch (error) {
