@@ -98,8 +98,11 @@ editForm.addEventListener('submit', async (event) => {
 function initializePage() {
     const urlParams = new URLSearchParams(window.location.search);
     const studentIdFromUrl = urlParams.get('id');
+    console.log('ID from URL:', studentIdFromUrl); // <--- Add this line
     if (studentIdFromUrl) {
         loadStudentProfile(studentIdFromUrl);
+    } else {
+        // ...
     }
 }
 
