@@ -101,9 +101,28 @@ function initializePage() {
     console.log('ID from URL:', studentIdFromUrl); // <--- Add this line
     if (studentIdFromUrl) {
         loadStudentProfile(studentIdFromUrl);
+        /** Fetches and displays a student's profile from the URL ID */
+async function loadStudentProfile(studentId) {
+    try {
+        console.log('Attempting to fetch data for ID:', studentId); // <--- Add this line
+        const { data, error } = await supabase.from('profiles').select('*').eq('student_id', studentId).single();
+        if (error) {
+            throw error;
+        }
+               console.log('Data successfully fetched:', data); // <--- Add this line
+        currentProfileData = data;
+        populateProfileData(data);
+        await checkOwnership(data.user_id);
+        loadingMessage.style.display = 'none';
+        profileContent.style.display = 'block';
+    } catch (error) {
+        // ... (error handling)
+    }
+}
     } else {
         // ...
     }
 }
+
 
 initializePage();
