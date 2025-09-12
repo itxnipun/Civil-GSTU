@@ -80,7 +80,7 @@ async function loadStudentProfile(studentId) {
         
         currentProfileData = data;
         populateProfileData(data);
-        await checkOwnership(data.user_id);
+        await checkOwnership(data.id);  // Your table uses 'id' not 'user_id'
 
         loadingMessage.style.display = 'none';
         profileContent.style.display = 'block';
@@ -148,13 +148,13 @@ async function uploadAvatar(file, userId) {
 
         // Create unique file path
         const fileExt = file.name.split('.').pop().toLowerCase();
-        const fileName = `${userId}/avatar_${Date.now()}.${fileExt}`;
+        const fileName = `${userId}_avatar_${Date.now()}.${fileExt}`;
         
         console.log('Uploading file to path:', fileName);
 
         // Upload file to Supabase Storage
         const { data: uploadData, error: uploadError } = await supabaseClient.storage
-            .from('avatars')
+    .from('profile_pictures')
             .upload(fileName, file, {
                 cacheControl: '3600',
                 upsert: true,
@@ -176,7 +176,7 @@ async function uploadAvatar(file, userId) {
 
         // Get the public URL for the uploaded file
         const { data: urlData } = supabaseClient.storage
-            .from('avatars')
+            .from('profile_pictures')
             .getPublicUrl(fileName);
 
         const publicUrl = urlData.publicUrl;
@@ -263,12 +263,11 @@ editForm.addEventListener('submit', async (event) => {
 
         // Update the profile in the database
         const { data, error } = await supabaseClient
-            .from('profiles')
-            .update(updatedInfo)
-            .eq('user_id', currentUser.id)  // Use user_id instead of student_id for RLS
-            .eq('student_id', currentProfileData.student_id)
-            .select()
-            .single();
+    .from('profiles')
+    .update(updatedInfo)
+    .eq('id', currentUser.id)  // Use 'id' not 'user_id' based on your table
+    .select()
+    .single();
 
         if (error) {
             console.error('Database update error:', error);
@@ -324,6 +323,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 
 // Initialize the page
 initializePage();
+
 
 
 
