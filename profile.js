@@ -31,8 +31,9 @@ function populateProfileData(profile) {
 }
 
 /** Checks if the logged-in user owns this profile and shows the edit button */
+// To this:
 async function checkOwnership(profileUserId) {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
     if (session && session.user && session.user.id === profileUserId) {
         editButton.style.display = 'block';
     }
@@ -77,7 +78,7 @@ editForm.addEventListener('submit', async (event) => {
         avatar_url: document.getElementById('edit-image-url').value
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('profiles')
         .update(updatedInfo)
         .eq('student_id', currentProfileData.student_id)
@@ -126,4 +127,5 @@ async function loadStudentProfile(studentId) {
 
 
 initializePage();
+
 
