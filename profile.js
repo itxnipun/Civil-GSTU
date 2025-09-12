@@ -1,6 +1,5 @@
 // This is a standard JavaScript file (.js)
-
-// Enhanced profile.js with better error handling and user experience
+// Enhanced profile.js with fixed image upload and RLS policy handling
 
 // --- Configuration ---
 const SUPABASE_URL = 'https://cwubbhcuormtrvyczgpf.supabase.co';
@@ -48,8 +47,10 @@ async function checkOwnership(profileUserId) {
         if (session && session.user && session.user.id === profileUserId) {
             editButton.style.display = 'block';
             currentUser = session.user;
+            console.log('User can edit this profile:', session.user.id);
         } else {
             editButton.style.display = 'none';
+            console.log('User cannot edit this profile');
         }
     } catch (error) {
         console.error('Error checking ownership:', error);
@@ -124,6 +125,71 @@ function showMessage(message, type = 'info') {
     }, 5000);
 }
 
+/** Fixed image upload function with proper error handling */
+async function uploadAvatar(file, userId) {
+    try {
+        console.log('Starting upload process...', { 
+            fileName: file.name, 
+            fileSize: file.size, 
+            fileType: file.type,
+            userId: userId
+        });
+        
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type.toLowerCase())) {
+            throw new Error('Please select a valid image file (JPEG, PNG, GIF, or WebP)');
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            throw new Error('Image file must be less than 5MB');
+        }
+
+        // Create unique file path
+        const fileExt = file.name.split('.').pop().toLowerCase();
+        const fileName = `${userId}/avatar_${Date.now()}.${fileExt}`;
+        
+        console.log('Uploading file to path:', fileName);
+
+        // Upload file to Supabase Storage
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+            .from('avatars')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: true,
+                contentType: file.type
+            });
+
+        if (uploadError) {
+            console.error('Upload error details:', uploadError);
+            
+            // Handle specific RLS policy error
+            if (uploadError.message.includes('new row violates row-level security policy')) {
+                throw new Error('Storage permission denied. Please ensure you are logged in and have permission to upload files.');
+            }
+            
+            throw new Error(`Upload failed: ${uploadError.message}`);
+        }
+
+        console.log('Upload successful:', uploadData);
+
+        // Get the public URL for the uploaded file
+        const { data: urlData } = supabaseClient.storage
+            .from('avatars')
+            .getPublicUrl(fileName);
+
+        const publicUrl = urlData.publicUrl;
+        console.log('Generated public URL:', publicUrl);
+        
+        return publicUrl;
+        
+    } catch (error) {
+        console.error('Avatar upload error:', error);
+        throw error;
+    }
+}
+
 // Event Listeners for the Edit Modal
 editButton.addEventListener('click', () => {
     if (!currentProfileData) return;
@@ -165,36 +231,17 @@ editForm.addEventListener('submit', async (event) => {
         
         // If a new file was selected, upload it first
         if (avatarFile) {
-            // Validate file type
-            if (!avatarFile.type.startsWith('image/')) {
-                throw new Error('Please select a valid image file.');
-            }
-            
-            // Validate file size (max 5MB)
-            if (avatarFile.size > 5 * 1024 * 1024) {
-                throw new Error('Image file must be less than 5MB.');
-            }
-
-            const filePath = `${currentUser.id}/avatar-${Date.now()}.jpg`;
-            
-            const { data: uploadData, error: uploadError } = await supabaseClient
-                .storage
-                .from('avatars')
-                .upload(filePath, avatarFile, { upsert: true });
-
-            if (uploadError) {
-                throw new Error('Failed to upload image: ' + uploadError.message);
-            }
-
-            const { data: publicUrlData } = supabaseClient.storage.from('avatars').getPublicUrl(filePath);
-            avatarUrl = publicUrlData.publicUrl;
+            showMessage('Uploading image...', 'info');
+            avatarUrl = await uploadAvatar(avatarFile, currentUser.id);
+            console.log('New avatar URL:', avatarUrl);
         }
         
         const updatedInfo = {
             full_name: document.getElementById('edit-name').value.trim(),
             email: document.getElementById('edit-email').value.trim(),
             phone_number: document.getElementById('edit-phone').value.trim(),
-            avatar_url: avatarUrl
+            avatar_url: avatarUrl,
+            updated_at: new Date().toISOString()
         };
 
         // Validate required fields
@@ -212,16 +259,29 @@ editForm.addEventListener('submit', async (event) => {
             throw new Error('Please enter a valid email address.');
         }
 
+        console.log('Updating profile with data:', updatedInfo);
+
+        // Update the profile in the database
         const { data, error } = await supabaseClient
             .from('profiles')
             .update(updatedInfo)
+            .eq('user_id', currentUser.id)  // Use user_id instead of student_id for RLS
             .eq('student_id', currentProfileData.student_id)
             .select()
             .single();
 
         if (error) {
+            console.error('Database update error:', error);
+            
+            // Handle specific RLS policy error
+            if (error.message.includes('new row violates row-level security policy')) {
+                throw new Error('You do not have permission to update this profile.');
+            }
+            
             throw new Error('Failed to update profile: ' + error.message);
         }
+
+        console.log('Profile updated successfully:', data);
 
         currentProfileData = data;
         populateProfileData(data);
@@ -256,6 +316,7 @@ function initializePage() {
 
 // Listen for auth state changes
 supabaseClient.auth.onAuthStateChange((event, session) => {
+    console.log('Auth state changed:', event, session?.user?.id);
     if (currentProfileData) {
         checkOwnership(currentProfileData.user_id);
     }
@@ -263,6 +324,7 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
 
 // Initialize the page
 initializePage();
+
 
 
 
