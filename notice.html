@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="style.css">
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Basic styling for the pinned notice and link */
+        .notice-card.pinned {
+            border-left: 4px solid #2563eb; /* Blue accent for pinned post */
+        }
+        .pinned-tag {
+            display: inline-block;
+            background-color: #2563eb;
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 9999px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .notice-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background-color: #3b82f6;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .notice-link:hover {
+            background-color: #2563eb;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -35,6 +66,10 @@
     <script>
         const noticeContainer = document.getElementById('notice-list-container');
         
+        // Assume supabaseClient is initialized in auth.js or elsewhere
+        // const { createClient } = supabase
+        // const supabaseClient = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY')
+
         // Function to format the date
         function formatDate(isoString) {
             const date = new Date(isoString);
@@ -44,6 +79,31 @@
         }
 
         async function loadNotices() {
+            noticeContainer.innerHTML = ''; // Clear loading message
+
+            // 1. Manually create and add the pinned notice first
+            const pinnedNotice = {
+                title: 'Updated Syllabus, B.Sc. in Civil Engineering, Gopalganj Science and Technology University',
+                // Using a very recent, fixed date to ensure it's clear this is a permanent notice
+                created_at: '2025-09-14T00:00:00.000Z', 
+                content_html: `<p>The updated syllabus for the B.Sc. in Civil Engineering program is now available. Please review the new course structure and requirements.</p><a href="syllabus_notice.html" class="notice-link">View Updated Syllabus</a>`
+            };
+
+            const pinnedNoticeCard = `
+                <div class="notice-card pinned">
+                    <div class="notice-card-header">
+                        <h3><span class="pinned-tag">PINNED</span>${pinnedNotice.title}</h3>
+                        <p>Posted on: ${formatDate(pinnedNotice.created_at)}</p>
+                    </div>
+                    <div class="notice-card-body">
+                        ${pinnedNotice.content_html}
+                    </div>
+                </div>
+            `;
+            noticeContainer.innerHTML += pinnedNoticeCard;
+
+
+            // 2. Fetch and display the rest of the notices from Supabase
             const { data, error } = await supabaseClient
                 .from('notices')
                 .select('*')
@@ -51,15 +111,15 @@
 
             if (error) {
                 console.error('Error fetching notices:', error);
-                noticeContainer.innerHTML = '<p>Could not load notices.</p>';
+                noticeContainer.innerHTML += '<p>Could not load other notices.</p>';
                 return;
             }
             if (data.length === 0) {
-                noticeContainer.innerHTML = '<p>No notices have been posted yet.</p>';
+                // This message will appear if there are NO other notices
+                // console.log('No other notices have been posted yet.'); 
                 return;
             }
-
-            noticeContainer.innerHTML = ''; // Clear loading message
+            
             data.forEach(notice => {
                 let contentHTML = '';
                 switch (notice.content_type) {
@@ -92,7 +152,23 @@
                 noticeContainer.innerHTML += noticeCard;
             });
         }
-        loadNotices();
+        
+        // This function will repeatedly check if supabaseClient is available
+        // before calling loadNotices(). This prevents the "not defined" error.
+        function initializePage() {
+            if (typeof supabaseClient !== 'undefined' && supabaseClient) {
+                // supabaseClient is ready, we can load the notices
+                loadNotices();
+            } else {
+                // supabaseClient is not ready yet, check again in a moment
+                setTimeout(initializePage, 100);
+            }
+        }
+
+        // Start the process
+        initializePage();
+
     </script>
 </body>
 </html>
+
