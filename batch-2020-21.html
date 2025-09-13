@@ -31,15 +31,16 @@
         <div id="advisor" class="tab-content">
             <h2>Batch Advisor</h2>
             <div class="profile-card" style="max-width: 350px; margin: auto;">
-                <img src="https://placehold.co/400" alt="Profile Photo">
-                <h3>Dr. Rahman Khan</h3>
+                <img src="images/aohona-arefin.jpg" alt="Photo of Batch Advisor">
+                <h3>Aohona Arefin</h3>
+                <p>Assistant Professor, Department of Civil Engineering</p>
                 <p class="title">Batch Advisor</p>
             </div>
         </div>
         <div id="schedule" class="tab-content"><h2>Class Schedule (Routine)</h2><p style="text-align:center;">Schedule for this batch will be updated soon.</p></div>
         <div id="contents" class="tab-content">
     <h2>Class Contents & Resources</h2>
-    <iframe 
+    <iframe
         src="https://drive.google.com/embeddedfolderview?id=18IFXKkuKROQUG1d03kj9-dMmS76IFlM-#grid"
         style="width:100%; height:600px; border:0;">
     </iframe>
@@ -66,7 +67,13 @@
 
         const studentGrid = document.getElementById('student-grid');
         async function loadStudents() {
-            const { data, error } = await supabaseClient.from('profiles').select('*').like('student_id', '20CE%').order('student_id');
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .like('student_id', '20CE%')
+                .not('student_id', 'in', '("20CE011", "20CE021", "20CE025", "20CE036")')
+                .order('student_id');
+                
             if (error) {
                 console.error('Error fetching students:', error);
                 studentGrid.innerHTML = '<p>Could not load student data.</p>';
@@ -78,22 +85,20 @@
             }
             studentGrid.innerHTML = '';
             data.forEach(student => {
-                // This block is now corrected, with the duplication removed.
                 const cardHTML = `
-                    <div class="profile-card">
-                        <a href="profile.html?id=${student.student_id}" style="text-decoration: none; color: inherit;">
-                            <img loading="lazy" src="${student.avatar_url || `https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}`}" alt="Photo of ${student.full_name}">
-                            <h3>${student.full_name}</h3>
-                            <p><strong>Student ID:</strong> ${student.student_id}</p>
-                            <p><strong>Email:</strong> ${student.email || 'N/A'}</p>
-                            <p><strong>Number:</strong> ${student.phone_number || 'N/A'}</p>
-                        </a>
-                    </div>`;
+                        <div class="profile-card">
+                            <a href="profile.html?id=${student.student_id}" style="text-decoration: none; color: inherit;">
+                                <img loading="lazy" src="${student.avatar_url || `https://placehold.co/400x400/cccccc/333333/png?text=${student.student_id}`}" alt="Photo of ${student.full_name}">
+                                <h3>${student.full_name}</h3>
+                                <p><strong>Student ID:</strong> ${student.student_id}</p>
+                                <p><strong>Email:</strong> ${student.email || 'N/A'}</p>
+                                <p><strong>Number:</strong> ${student.phone_number || 'N/A'}</p>
+                            </a>
+                        </div>`;
                 studentGrid.innerHTML += cardHTML;
             });
         }
         loadStudents();
     </script>
 </body>
-
 </html>
