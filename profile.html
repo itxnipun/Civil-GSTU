@@ -16,7 +16,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #453737 0%, #d70404 100%);
             min-height: 100vh;
             padding: 20px;
             color: #333;
@@ -38,8 +38,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 120px;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            height: 30px;
+            background: linear-gradient(135deg, #c90000 0%, #000000 100%);
             z-index: 1;
         }
 
@@ -189,15 +189,17 @@
 
         .modal-content {
             background: #ffffff;
-            margin: 8% auto;
+            margin: 6% auto;
             padding: 40px;
             border: none;
             width: 90%;
-            max-width: 520px;
+            max-width: 450px;
             border-radius: 20px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
             animation: slideIn 0.3s ease;
             position: relative;
+            max-height: 80vh;          /* ← MAX HEIGHT: Cannot exceed 90% of viewport height */
+            overflow-y: auto;
         }
 
         @keyframes slideIn {
@@ -262,7 +264,7 @@
         }
 
         .modal-content button[type="submit"] {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #a60a0a 0%, #dc0000 100%);
             color: white;
             border: none;
             padding: 14px 28px;
@@ -311,8 +313,8 @@
             }
 
             .profile-image {
-                width: 140px;
-                height: 140px;
+                width: 190px;
+                height: 190px;
             }
 
             .profile-info h1 {
@@ -322,7 +324,7 @@
             .modal-content {
                 margin: 15% auto;
                 padding: 30px 25px;
-                width: 95%;
+                width: 85%;
             }
 
             .modal-buttons {
