@@ -5,31 +5,355 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Styles for the Profile Page and Edit Modal */
+        /* Enhanced Styles for Classic, Formal Profile Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
         .profile-container {
-            max-width: 600px; margin: 50px auto; padding: 30px;
-            background-color: #fff; border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center;
+            max-width: 680px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            position: relative;
         }
+
+        .profile-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            z-index: 1;
+        }
+
+        .profile-content-wrapper {
+            position: relative;
+            z-index: 2;
+            padding: 60px 40px 40px;
+            text-align: center;
+        }
+
+        #loading-message {
+            padding: 80px 40px;
+            text-align: center;
+            font-size: 18px;
+            color: #64748b;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
         .profile-image {
-            width: 150px; height: 150px; border-radius: 50%;
-            object-fit: cover; border: 5px solid #f0f0f0; margin-bottom: 20px;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid #ffffff;
+            margin: 0 auto 30px;
+            display: block;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 3;
         }
-        .modal {
-            display: none; position: fixed; z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.5);
+
+        .profile-image:hover {
+            transform: translateY(-2px);
         }
-        .modal-content {
-            background-color: #fefefe; margin: 15% auto; padding: 20px;
-            border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 8px;
+
+        .profile-info {
+            margin-bottom: 40px;
         }
-        .modal-content input {
-            width: 100%; padding: 8px; margin: 10px 0; box-sizing: border-box;
+
+        .profile-info h1 {
+            font-family: 'Crimson Text', Georgia, serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
+
+        .profile-info p {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .profile-info p:before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .profile-info p:first-of-type:before {
+            content: '🆔';
+            width: auto;
+            height: auto;
+            background: none;
+        }
+
+        .profile-info p:nth-of-type(2):before {
+            content: '✉️';
+            width: auto;
+            height: auto;
+            background: none;
+        }
+
+        .profile-info p:last-of-type:before {
+            content: '📱';
+            width: auto;
+            height: auto;
+            background: none;
+        }
+
         #edit-button {
-            margin-top: 20px; padding: 10px 20px; cursor: pointer; display: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            letter-spacing: 0.5px;
+            font-family: 'Inter', sans-serif;
+            display: none;
+        }
+
+        #edit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        #edit-button:active {
+            transform: translateY(0);
+        }
+
+        #error-message {
+            padding: 40px;
+            text-align: center;
+            color: #e74c3c;
+            font-size: 16px;
+            display: none;
+            background: #fdf2f2;
+            margin: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        /* Enhanced Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: #ffffff;
+            margin: 8% auto;
+            padding: 40px;
+            border: none;
+            width: 90%;
+            max-width: 520px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            animation: slideIn 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            font-family: 'Crimson Text', Georgia, serif;
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .modal-content label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            margin-top: 20px;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-content input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-content input[type="file"] {
+            background: #ffffff;
+            border: 2px dashed #d1d5db;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .modal-content input[type="file"]:hover {
+            border-color: #667eea;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+            justify-content: center;
+        }
+
+        .modal-content button[type="submit"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-content button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        #cancel-edit {
+            background: #f8fafc;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #cancel-edit:hover {
+            background: #e2e8f0;
+            color: #475569;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-container {
+                margin: 20px auto;
+                border-radius: 16px;
+            }
+
+            .profile-content-wrapper {
+                padding: 40px 25px 30px;
+            }
+
+            .profile-image {
+                width: 140px;
+                height: 140px;
+            }
+
+            .profile-info h1 {
+                font-size: 1.8rem;
+            }
+
+            .modal-content {
+                margin: 15% auto;
+                padding: 30px 25px;
+                width: 95%;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+            .modal-buttons button {
+                width: 100%;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #loading-message {
+            animation: pulse 2s infinite;
+        }
+
+        /* Smooth transitions for content reveal */
+        #profile-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        #profile-content.show {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -37,14 +361,16 @@
     <div class="profile-container">
         <div id="loading-message">Loading Profile... ⏳</div>
         <div id="profile-content" style="display: none;">
-            <img src="" alt="Student Profile Picture" id="student-image" class="profile-image">
-            <div class="profile-info">
-                <h1 id="student-name"></h1>
-                <p id="student-id"></p>
-                <p id="student-email"></p>
-                <p id="student-number"></p>
+            <div class="profile-content-wrapper">
+                <img src="" alt="Student Profile Picture" id="student-image" class="profile-image">
+                <div class="profile-info">
+                    <h1 id="student-name"></h1>
+                    <p id="student-id"></p>
+                    <p id="student-email"></p>
+                    <p id="student-number"></p>
+                </div>
+                <button id="edit-button">Edit Profile</button>
             </div>
-            <button id="edit-button">Edit Profile</button>
         </div>
         <div id="error-message" style="display: none; color: red;"></div>
     </div>
@@ -53,26 +379,46 @@
         <div class="modal-content">
             <h2>Edit Your Profile</h2>
             <form id="edit-form">
-                <label for="edit-name">Name:</label>
-                <input type="text" id="edit-name" required>
+                <label for="edit-name">Full Name</label>
+                <input type="text" id="edit-name" required placeholder="Enter your full name">
 
-                <label for="edit-email">Email:</label>
-                <input type="email" id="edit-email" required>
+                <label for="edit-email">Email Address</label>
+                <input type="email" id="edit-email" required placeholder="Enter your email address">
 
-                <label for="edit-phone">Number:</label>
-                <input type="tel" id="edit-phone" required>
+                <label for="edit-phone">Phone Number</label>
+                <input type="tel" id="edit-phone" required placeholder="Enter your phone number">
                 
-                <label for="edit-avatar">Profile Picture:</label>
+                <label for="edit-avatar">Profile Picture</label>
                 <input type="file" id="edit-avatar" accept="image/*">
 
-                <button type="submit">Save Changes</button>
-                <button type="button" id="cancel-edit">Cancel</button>
+                <div class="modal-buttons">
+                    <button type="submit">Save Changes</button>
+                    <button type="button" id="cancel-edit">Cancel</button>
+                </div>
             </form>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="profile.js"></script>
+    
+    <script>
+        // Add smooth reveal animation when content loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileContent = document.getElementById('profile-content');
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        if (profileContent.style.display !== 'none') {
+                            setTimeout(() => {
+                                profileContent.classList.add('show');
+                            }, 100);
+                        }
+                    }
+                });
+            });
+            observer.observe(profileContent, { attributes: true });
+        });
+    </script>
 </body>
-
 </html>
