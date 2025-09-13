@@ -34,44 +34,68 @@
         <p>Gopalganj-8105, Bangladesh</p>
     </footer>
 
-    <script src="auth.js"></script> 
+    <script src="auth.js"></script>
     <script>
         const mainContainer = document.getElementById('main-container');
 
         // This function now fetches CR data from your Supabase table
         async function loadClassReps() {
-            const { data, error } = await supabaseClient
+            // 1. Fetch all class representatives
+            const { data: reps, error: repsError } = await supabaseClient
                 .from('class_representatives')
                 .select('*')
-                .order('session', { ascending: false }); // Show newest sessions first
+                .order('session', { ascending: false });
 
-            if (error) {
-                console.error('Error fetching class reps:', error);
+            if (repsError) {
+                console.error('Error fetching class reps:', repsError);
                 mainContainer.innerHTML += '<p>Could not load Class Representative data.</p>';
                 return;
             }
-
-            if (data.length === 0) {
+            if (!reps || reps.length === 0) {
                  mainContainer.innerHTML += '<p>No Class Representative data found.</p>';
                 return;
             }
 
-            // Loop through the data from the database and create the HTML
-            data.forEach(repData => {
+            // 2. Collect all unique student IDs of the CRs
+            const crIds = [...new Set(reps.flatMap(r => [r.cr1_id, r.cr2_id]))];
+
+            // 3. Fetch the profiles for all those CRs in a single query
+            const { data: profiles, error: profilesError } = await supabaseClient
+                .from('profiles')
+                .select('student_id, avatar_url')
+                .in('student_id', crIds);
+
+            if (profilesError) {
+                console.error('Error fetching profiles for CRs:', profilesError);
+                // Continue without profile pictures if this fails
+            }
+
+            // 4. Create a simple map of student_id -> avatar_url for easy lookup
+            const avatarMap = new Map(profiles?.map(p => [p.student_id, p.avatar_url]));
+
+            // 5. Loop through the reps and build the HTML, using the avatar map
+            reps.forEach(repData => {
+                const cr1_avatar = avatarMap.get(repData.cr1_id) || `https://placehold.co/400x400/0D2C54/FFFFFF/png?text=${repData.cr1_id}`;
+                const cr2_avatar = avatarMap.get(repData.cr2_id) || `https://placehold.co/400x400/A31F34/FFFFFF/png?text=${repData.cr2_id}`;
+
                 const sectionHTML = `
                     <h2 style="text-align: center; margin-top: 3rem;">Session ${repData.session}</h2>
                     <div class="reps-container">
                         <div class="profile-card">
-                            <img src="https://placehold.co/400x400/0D2C54/FFFFFF/png?text=CR" alt="CR Photo">
-                            <h3>${repData.cr1_name}</h3>
-                            <p class="title">Class Representative</p>
-                            <p><strong>Student ID:</strong> ${repData.cr1_id}</p>
+                             <a href="profile.html?id=${repData.cr1_id}" class="profile-link">
+                                <img src="${cr1_avatar}" alt="Photo of ${repData.cr1_name}">
+                                <h3>${repData.cr1_name}</h3>
+                                <p class="title">Class Representative</p>
+                                <p><strong>Student ID:</strong> ${repData.cr1_id}</p>
+                            </a>
                         </div>
                         <div class="profile-card">
-                            <img src="https://placehold.co/400x400/A31F34/FFFFFF/png?text=CR" alt="CR Photo">
-                            <h3>${repData.cr2_name}</h3>
-                            <p class="title">Class Representative</p>
-                            <p><strong>Student ID:</strong> ${repData.cr2_id}</p>
+                            <a href="profile.html?id=${repData.cr2_id}" class="profile-link">
+                                <img src="${cr2_avatar}" alt="Photo of ${repData.cr2_name}">
+                                <h3>${repData.cr2_name}</h3>
+                                <p class="title">Class Representative</p>
+                                <p><strong>Student ID:</strong> ${repData.cr2_id}</p>
+                             </a>
                         </div>
                     </div>
                 `;
