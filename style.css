@@ -1,6 +1,11 @@
 /* --- Google Fonts & Modern Resets --- */
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Roboto:wght@400;700&display=swap');
 
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
 :root {
     --mit-red: #A31F34;
     --text-black: #222222;
@@ -1062,5 +1067,82 @@ select:focus {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+    }
+}
+/* ======================================= */
+/* ===== NEW HAMBURGER MENU STYLES ===== */
+/* ======================================= */
+
+/* --- Hamburger Icon Base Style --- */
+.hamburger {
+    display: none; /* Hidden on desktop */
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 1001; /* Must be on top of everything */
+}
+.hamburger-bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px 0;
+    background-color: var(--text-black);
+    transition: all 0.3s ease-in-out;
+}
+
+/* --- Mobile Styles Start Here --- */
+@media (max-width: 768px) {
+    /* Show the hamburger and hide the desktop links */
+    .hamburger {
+        display: block;
+    }
+    .navbar .nav-links {
+        /* This turns the nav into a hidden sidebar */
+        position: fixed;
+        top: 0;
+        right: -100%; /* Start off-screen */
+        width: 70%;
+        height: 100vh;
+        background-color: white;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        
+        /* Arrange links vertically */
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 6rem 2rem 2rem; /* Add padding for content */
+        transition: right 0.4s ease-in-out;
+    }
+
+    /* Style for when the menu is OPEN */
+    .nav-links.is-active {
+        right: 0; /* Slide into view */
+    }
+
+    /* Adjust link spacing for the mobile menu */
+    .navbar .nav-links li {
+        margin: 0;
+        width: 100%;
+    }
+    .navbar .nav-links a {
+        padding: 1rem 0;
+        width: 100%;
+        font-size: 1.2rem;
+        border-bottom: 1px solid var(--border-gray);
+    }
+    .navbar .nav-links .login-button {
+        padding-top: 2rem;
+    }
+
+    /* Animate hamburger to an "X" when active */
+    .hamburger.is-active .hamburger-bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.is-active .hamburger-bar:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.is-active .hamburger-bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
     }
 }

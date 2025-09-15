@@ -229,4 +229,16 @@ if (updatePasswordForm) {
         }
     });
 }
+// --- Hamburger Menu Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    // We need to query for these elements after the DOM is loaded
+    const hamburgerBtn = document.getElementById('hamburger-button');
+    const navMenu = document.getElementById('main-nav-links');
 
+    if (hamburgerBtn && navMenu) {
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('is-active');
+            navMenu.classList.toggle('is-active');
+        });
+    }
+});
