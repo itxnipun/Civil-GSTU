@@ -15,6 +15,36 @@
         .table-stripe:nth-child(even) { background-color: #f8fafc; }
         .course-credit { color: #c21a1a; font-weight: 600; } /* Red Credit Text */
         .section-divider { height: 3px; background: #c21a1a; border-radius: 2px; } /* Red Divider */
+        
+        /* Floating Action Buttons */
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 50;
+        }
+
+        .fab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 9999px;
+            color: white;
+            background-color: #c21a1a;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease-in-out;
+            text-decoration: none;
+        }
+
+        .fab:hover {
+            background-color: #a01616;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -25,15 +55,15 @@
             <div class="text-center">
                 <div class="mb-6">
                     <h1 class="text-5xl md:text-6xl font-bold mb-4 tracking-tight">
-                        Bachelor of Science in Civill Engineering
+                        Bachelor of Science in Civil Engineering
                     </h1>
                     <h2 class="text-3xl md:text-4xl font-semibold text-red-100">
-                        Gopalganj Science and Technology University
+                        Comprehensive Academic Curriculum
                     </h2>
                 </div>
                 <div class="max-w-3xl mx-auto">
                     <p class="text-xl md:text-2xl font-light text-red-100 mb-6">
-                        Comprehensive Academic Curriculum
+Syllabus information is subject to change. Please consult the department for official records.
                     </p>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                         <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
@@ -72,101 +102,101 @@
             
             <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
                 <div class="bg-gradient-to-r from-red-800 to-black p-6">
-                    <h3 class="text-2xl font-semibold text-white">Credit Distribution</h3>
+                    <h3 class="text-2xl font-semibold text-white text-center">Credit Distribution</h3>
                 </div>
                 <div class="p-8">
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead>
                                 <tr class="border-b-2 border-gray-200">
-                                    <th class="text-left py-4 px-6 font-semibold text-lg text-gray-800">Course Category</th>
-                                    <th class="text-right py-4 px-6 font-semibold text-lg text-gray-800">Credits</th>
-                                    <th class="text-right py-4 px-6 font-semibold text-lg text-gray-800">Percentage</th>
+                                    <th class="text-center py-4 px-6 font-semibold text-lg text-gray-800">Course Category</th>
+                                    <th class="text-center py-4 px-6 font-semibold text-lg text-gray-800">Credits</th>
+                                    <th class="text-center py-4 px-6 font-semibold text-lg text-gray-800">Percentage</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Basic Science</td>
-                                    <td class="py-4 px-6 text-right course-credit">11.25</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">7.0%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Basic Science</td>
+                                    <td class="py-4 px-6 text-center course-credit">11.25</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">7.0%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Mathematics</td>
-                                    <td class="py-4 px-6 text-right course-credit">12.00</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">7.5%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Mathematics</td>
+                                    <td class="py-4 px-6 text-center course-credit">12.00</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">7.5%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Humanities</td>
-                                    <td class="py-4 px-6 text-right course-credit">7.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">4.7%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Humanities</td>
+                                    <td class="py-4 px-6 text-center course-credit">7.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">4.7%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Basic Engineering</td>
-                                    <td class="py-4 px-6 text-right course-credit">48.75</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">30.5%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Basic Engineering</td>
+                                    <td class="py-4 px-6 text-center course-credit">48.75</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">30.5%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Civil Engineering Practice</td>
-                                    <td class="py-4 px-6 text-right course-credit">8.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">5.3%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Civil Engineering Practice</td>
+                                    <td class="py-4 px-6 text-center course-credit">8.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">5.3%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Structural Engineering</td>
-                                    <td class="py-4 px-6 text-right course-credit">19.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">12.2%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Structural Engineering</td>
+                                    <td class="py-4 px-6 text-center course-credit">19.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">12.2%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Environmental Engineering</td>
-                                    <td class="py-4 px-6 text-right course-credit">7.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">4.7%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Environmental Engineering</td>
+                                    <td class="py-4 px-6 text-center course-credit">7.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">4.7%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Geotechnical Engineering</td>
-                                    <td class="py-4 px-6 text-right course-credit">8.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">5.3%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Geotechnical Engineering</td>
+                                    <td class="py-4 px-6 text-center course-credit">8.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">5.3%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Transportation Engineering</td>
-                                    <td class="py-4 px-6 text-right course-credit">7.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">4.7%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Transportation Engineering</td>
+                                    <td class="py-4 px-6 text-center course-credit">7.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">4.7%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Water Resources Engineering</td>
-                                    <td class="py-4 px-6 text-right course-credit">7.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">4.7%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Water Resources Engineering</td>
+                                    <td class="py-4 px-6 text-center course-credit">7.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">4.7%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Project and Thesis</td>
-                                    <td class="py-4 px-6 text-right course-credit">4.50</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">2.8%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Project and Thesis</td>
+                                    <td class="py-4 px-6 text-center course-credit">4.50</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">2.8%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 font-medium">Viva-Voce</td>
-                                    <td class="py-4 px-6 text-right course-credit">6.00</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">3.8%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Viva-Voce</td>
+                                    <td class="py-4 px-6 text-center course-credit">6.00</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">3.8%</td>
                                 </tr>
                                 <tr class="bg-red-50 border-t-2 border-red-200">
-                                    <td class="py-4 px-6 font-bold text-lg">Subtotal</td>
-                                    <td class="py-4 px-6 text-right font-bold text-lg text-red-600">149.00</td>
-                                    <td class="py-4 px-6 text-right font-semibold text-gray-700">93.1%</td>
+                                    <td class="py-4 px-6 font-bold text-lg text-center">Subtotal</td>
+                                    <td class="py-4 px-6 text-center font-bold text-lg text-red-600">149.00</td>
+                                    <td class="py-4 px-6 text-center font-semibold text-gray-700">93.1%</td>
                                 </tr>
                                 <tr class="table-stripe">
-                                    <td class="py-4 px-6 font-semibold text-gray-700" colspan="3">Optional Courses:</td>
+                                    <td class="py-4 px-6 font-semibold text-gray-700 text-center" colspan="3">Optional Courses:</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 pl-12 font-medium">Theory</td>
-                                    <td class="py-4 px-6 text-right course-credit">8.00</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">5.0%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Theory</td>
+                                    <td class="py-4 px-6 text-center course-credit">8.00</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">5.0%</td>
                                 </tr>
                                 <tr class="table-stripe hover:bg-red-50 transition-colors">
-                                    <td class="py-4 px-6 pl-12 font-medium">Sessional</td>
-                                    <td class="py-4 px-6 text-right course-credit">3.00</td>
-                                    <td class="py-4 px-6 text-right text-gray-600">1.9%</td>
+                                    <td class="py-4 px-6 font-medium text-center">Sessional</td>
+                                    <td class="py-4 px-6 text-center course-credit">3.00</td>
+                                    <td class="py-4 px-6 text-center text-gray-600">1.9%</td>
                                 </tr>
                                 <tr class="bg-gray-100 border-t-4 border-gray-300">
-                                    <td class="py-6 px-6 font-bold text-xl text-gray-900">Grand Total</td>
-                                    <td class="py-6 px-6 text-right font-bold text-2xl text-red-600">160.00</td>
-                                    <td class="py-6 px-6 text-right font-bold text-lg text-gray-800">100%</td>
+                                    <td class="py-6 px-6 font-bold text-xl text-gray-900 text-center">Grand Total</td>
+                                    <td class="py-6 px-6 text-center font-bold text-2xl text-red-600">160.00</td>
+                                    <td class="py-6 px-6 text-center font-bold text-lg text-gray-800">100%</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -200,7 +230,6 @@
                         <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
                             <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
                                 <h4 class="text-2xl font-semibold text-white">1st Semester</h4>
-                                <p class="text-red-100">Examination 2020</p>
                             </div>
                             <div class="p-6">
                                 <div class="overflow-x-auto">
@@ -228,7 +257,6 @@
                         <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
                             <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
                                 <h4 class="text-2xl font-semibold text-white">2nd Semester</h4>
-                                <p class="text-red-100">Examination 2020</p>
                             </div>
                             <div class="p-6">
                                 <div class="overflow-x-auto">
@@ -261,8 +289,14 @@
                         <div class="w-16 h-1 bg-gray-400 mx-auto rounded"></div>
                     </div>
                     <div class="grid lg:grid-cols-2 gap-8">
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card"><div class="bg-gradient-to-r from-red-700 to-red-800 p-6"><h4 class="text-2xl font-semibold text-white">1st Semester</h4><p class="text-red-100">Examination 2021</p></div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE201</td><td class="py-3">Engineering Materials</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE203</td><td class="py-3">Engineering Geology and Geomorphology</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE205</td><td class="py-3">Solid Mechanics I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">AIS209</td><td class="py-3">Accounting</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">MAT211</td><td class="py-3">Fourier Analysis and Differential Equations</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE202</td><td class="py-3">Materials Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE204</td><td class="py-3">Details of Construction</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE206</td><td class="py-3">Computer Programming Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE208</td><td class="py-3">Computer Aided Drafting</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE212</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">1.5</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">20.75</td><td class="py-4 text-center font-bold">27.5</td></tr></tbody></table></div></div></div>
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card"><div class="bg-gradient-to-r from-red-700 to-red-800 p-6"><h4 class="text-2xl font-semibold text-white">2nd Semester</h4><p class="text-red-100">Examination 2021</p></div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE251</td><td class="py-3">Numerical Methods</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE253</td><td class="py-3">Solid Mechanics II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">MAT251</td><td class="py-3">Special Functions Statistics and Laplace Transformation</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE255</td><td class="py-3">Fluid Mechanics</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE252</td><td class="py-3">Engineering Computation Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE254</td><td class="py-3">Structural Mechanics and Materials Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE256</td><td class="py-3">Fluid Mechanics Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE258</td><td class="py-3">Quantity Surveying</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE264</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">17.75</td><td class="py-4 text-center font-bold">23</td></tr></tbody></table></div></div></div>
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
+                            <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
+                                <h4 class="text-2xl font-semibold text-white">1st Semester</h4>
+                                </div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE201</td><td class="py-3">Engineering Materials</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE203</td><td class="py-3">Engineering Geology and Geomorphology</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE205</td><td class="py-3">Solid Mechanics I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">AIS209</td><td class="py-3">Accounting</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">MAT211</td><td class="py-3">Fourier Analysis and Differential Equations</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE202</td><td class="py-3">Materials Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE204</td><td class="py-3">Details of Construction</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE206</td><td class="py-3">Computer Programming Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE208</td><td class="py-3">Computer Aided Drafting</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE212</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">1.5</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">20.75</td><td class="py-4 text-center font-bold">27.5</td></tr></tbody></table></div></div></div>
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
+                            <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
+                                <h4 class="text-2xl font-semibold text-white">2nd Semester</h4>
+                                </div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE251</td><td class="py-3">Numerical Methods</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE253</td><td class="py-3">Solid Mechanics II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">MAT251</td><td class="py-3">Special Functions Statistics and Laplace Transformation</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE255</td><td class="py-3">Fluid Mechanics</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE252</td><td class="py-3">Engineering Computation Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE254</td><td class="py-3">Structural Mechanics and Materials Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE256</td><td class="py-3">Fluid Mechanics Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE258</td><td class="py-3">Quantity Surveying</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE264</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">17.75</td><td class="py-4 text-center font-bold">23</td></tr></tbody></table></div></div></div>
                     </div>
                 </div>
 
@@ -272,8 +306,16 @@
                         <div class="w-16 h-1 bg-gray-400 mx-auto rounded"></div>
                     </div>
                     <div class="grid lg:grid-cols-2 gap-8">
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card"><div class="bg-gradient-to-r from-red-700 to-red-800 p-6"><h4 class="text-2xl font-semibold text-white">1st Semester</h4><p class="text-red-100">Examination 2022</p></div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE301</td><td class="py-3">Professional Practices and Communication</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE311</td><td class="py-3">Structural Analysis and Design I</td><td class="py-3 text-center course-credit">4.00</td><td class="py-3 text-center">4</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE313</td><td class="py-3">Design of Concrete Structures I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE341</td><td class="py-3">Environmental Engineering I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE321</td><td class="py-3">Geotechnical Engineering I</td><td class="py-3 text-center course-credit">4.00</td><td class="py-3 text-center">4</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE302</td><td class="py-3">Professional Practices and Communication Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE342</td><td class="py-3">Environmental Engineering Laboratory</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE322</td><td class="py-3">Geotechnical Engineering Laboratory</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE304</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">21.25</td><td class="py-4 text-center font-bold">25</td></tr></tbody></table></div></div></div>
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card"><div class="bg-gradient-to-r from-red-700 to-red-800 p-6"><h4 class="text-2xl font-semibold text-white">2nd Semester</h4><p class="text-red-100">Examination 2022</p></div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE361</td><td class="py-3">Design of Concrete Structures II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE363</td><td class="py-3">Design of Steel Structures</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE391</td><td class="py-3">Environmental Engineering II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE381</td><td class="py-3">Transportation Engineering I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE351</td><td class="py-3">Open Channel Flow</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE352</td><td class="py-3">Open Channel Flow Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE362</td><td class="py-3">Concrete Structures Design Sessional I</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE364</td><td class="py-3">Steel Structures Design Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE354</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">19.25</td><td class="py-4 text-center font-bold">23</td></tr></tbody></table></div></div></div>
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
+                            <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
+                                <h4 class="text-2xl font-semibold text-white">1st Semester</h4>
+                                </div><div class="p-6">
+                                    <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE301</td><td class="py-3">Professional Practices and Communication</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE311</td><td class="py-3">Structural Analysis and Design I</td><td class="py-3 text-center course-credit">4.00</td><td class="py-3 text-center">4</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE313</td><td class="py-3">Design of Concrete Structures I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE341</td><td class="py-3">Environmental Engineering I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE321</td><td class="py-3">Geotechnical Engineering I</td><td class="py-3 text-center course-credit">4.00</td><td class="py-3 text-center">4</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE302</td><td class="py-3">Professional Practices and Communication Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE342</td><td class="py-3">Environmental Engineering Laboratory</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE322</td><td class="py-3">Geotechnical Engineering Laboratory</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE304</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">21.25</td><td class="py-4 text-center font-bold">25</td></tr></tbody></table></div></div></div>
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
+                            <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
+                                <h4 class="text-2xl font-semibold text-white">2nd Semester</h4>
+                                </div><div class="p-6">
+                                    <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE361</td><td class="py-3">Design of Concrete Structures II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE363</td><td class="py-3">Design of Steel Structures</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE391</td><td class="py-3">Environmental Engineering II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE381</td><td class="py-3">Transportation Engineering I</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE351</td><td class="py-3">Open Channel Flow</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE352</td><td class="py-3">Open Channel Flow Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE362</td><td class="py-3">Concrete Structures Design Sessional I</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE364</td><td class="py-3">Steel Structures Design Sessional</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE354</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">19.25</td><td class="py-4 text-center font-bold">23</td></tr></tbody></table></div></div></div>
                     </div>
                 </div>
 
@@ -283,8 +325,16 @@
                         <div class="w-16 h-1 bg-gray-400 mx-auto rounded"></div>
                     </div>
                     <div class="grid lg:grid-cols-2 gap-8">
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card"><div class="bg-gradient-to-r from-red-700 to-red-800 p-6"><h4 class="text-2xl font-semibold text-white">1st Semester</h4><p class="text-red-100">Examination 2023</p></div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE401</td><td class="py-3">Project Planning and Construction Management</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE411</td><td class="py-3">Structural Analysis and Design II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE421</td><td class="py-3">Geotechnical Engineering II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE431</td><td class="py-3">Transportation Engineering II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE403</td><td class="py-3">Hydrology, Irrigation and Flood Control</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE412</td><td class="py-3">Concrete Structures Design Sessional II</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE432</td><td class="py-3">Transportation Engineering Sessional I</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE400</td><td class="py-3">Project and Thesis</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE402</td><td class="py-3">Viva voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">20.25</td><td class="py-4 text-center font-bold">24</td></tr></tbody></table></div></div></div>
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card"><div class="bg-gradient-to-r from-red-700 to-red-800 p-6"><h4 class="text-2xl font-semibold text-white">2nd Semester</h4><p class="text-red-100">Examination 2023</p></div><div class="p-6"><div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE400</td><td class="py-3">Project and Thesis</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">-</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course I</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (1-1)</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (1-2)</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Sessional on Elective Course II (1)</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (2-1)</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (2-2)</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Sessional on Elective Course II (2)</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE478</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">16.75</td><td class="py-4 text-center font-bold">16</td></tr></tbody></table></div></div></div>
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
+                            <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
+                                <h4 class="text-2xl font-semibold text-white">1st Semester</h4>
+                                </div><div class="p-6">
+                                    <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE401</td><td class="py-3">Project Planning and Construction Management</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE411</td><td class="py-3">Structural Analysis and Design II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE421</td><td class="py-3">Geotechnical Engineering II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE431</td><td class="py-3">Transportation Engineering II</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE403</td><td class="py-3">Hydrology, Irrigation and Flood Control</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE412</td><td class="py-3">Concrete Structures Design Sessional II</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE432</td><td class="py-3">Transportation Engineering Sessional I</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE400</td><td class="py-3">Project and Thesis</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE402</td><td class="py-3">Viva voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">20.25</td><td class="py-4 text-center font-bold">24</td></tr></tbody></table></div></div></div>
+                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover semester-card">
+                            <div class="bg-gradient-to-r from-red-700 to-red-800 p-6">
+                                <h4 class="text-2xl font-semibold text-white">2nd Semester</h4>
+                                </div><div class="p-6">
+                                    <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b-2 border-gray-200"><th class="text-left py-3 font-semibold">Course No.</th><th class="text-left py-3 font-semibold">Course Title</th><th class="text-center py-3 font-semibold">Credit</th><th class="text-center py-3 font-semibold">Hrs/Week</th></tr></thead><tbody class="divide-y divide-gray-100"><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE400</td><td class="py-3">Project and Thesis</td><td class="py-3 text-center course-credit">3.00</td><td class="py-3 text-center">-</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course I</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (1-1)</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (1-2)</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Sessional on Elective Course II (1)</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (2-1)</td><td class="py-3 text-center course-credit">2.00</td><td class="py-3 text-center">2</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Elective Course II (2-2)</td><td class="py-3 text-center course-credit">1.50</td><td class="py-3 text-center">3</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE***</td><td class="py-3">Sessional on Elective Course II (2)</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="hover:bg-gray-50 transition-colors"><td class="py-3 font-mono text-sm">CE478</td><td class="py-3">Viva-voce</td><td class="py-3 text-center course-credit">0.75</td><td class="py-3 text-center">-</td></tr><tr class="bg-red-50 border-t-2 border-red-200"><td class="py-4 font-bold" colspan="2">Total</td><td class="py-4 text-center font-bold text-red-700">16.75</td><td class="py-4 text-center font-bold">16</td></tr></tbody></table></div></div></div>
                     </div>
                 </div>
             </div>
@@ -362,12 +412,22 @@
 
     </div>
 
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <!-- Back Button -->
+        <button onclick="history.back()" class="fab" aria-label="Go back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+        </button>
+        <!-- Home Button -->
+        <a href="index.html" class="fab" aria-label="Go to homepage">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </a>
+    </div>
+
     <footer class="text-center mt-12 py-8 bg-gray-800 text-gray-400">
         <p class="text-lg">&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
         <p class="mt-2">Gopalganj-8105, Bangladesh</p>
-        <p class="text-sm mt-4">Syllabus information is subject to change. Please consult the department for official records.</p>
     </footer>
 
 </body>
 </html>
-
