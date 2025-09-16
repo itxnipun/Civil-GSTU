@@ -44,7 +44,859 @@
                 <p class="title">Batch Advisor</p>
             </div>
         </div>
-        <div id="schedule" class="tab-content"><h2>Class Schedule (Routine)</h2><p style="text-align:center;">Schedule for this batch will be updated soon.</p></div>
+        <!-- Replace the existing schedule div content with this -->
+<div id="schedule" class="tab-content">
+    <h2>Class Schedule (Routine)</h2>
+    
+    <!-- Term Selection -->
+    <div class="term-selector">
+        <div class="term-grid">
+            <button class="term-btn" onclick="showSchedule('l1t1')" data-term="l1t1">
+                <span class="term-level">Level 1</span>
+                <span class="term-name">Term 1</span>
+            </button>
+            <button class="term-btn" onclick="showSchedule('l1t2')" data-term="l1t2">
+                <span class="term-level">Level 1</span>
+                <span class="term-name">Term 2</span>
+            </button>
+            <button class="term-btn" onclick="showSchedule('l2t1')" data-term="l2t1">
+                <span class="term-level">Level 2</span>
+                <span class="term-name">Term 1</span>
+            </button>
+            <button class="term-btn" onclick="showSchedule('l2t2')" data-term="l2t2">
+                <span class="term-level">Level 2</span>
+                <span class="term-name">Term 2</span>
+            </button>
+            <button class="term-btn" onclick="showSchedule('l3t1')" data-term="l3t1">
+                <span class="term-level">Level 3</span>
+                <span class="term-name">Term 1</span>
+            </button>
+            <button class="term-btn" onclick="showSchedule('l3t2')" data-term="l3t2">
+                <span class="term-level">Level 3</span>
+                <span class="term-name">Term 2</span>
+            </button>
+            <button class="term-btn" onclick="showSchedule('l4t1')" data-term="l4t1">
+                <span class="term-level">Level 4</span>
+                <span class="term-name">Term 1</span>
+            </button>
+            <button class="term-btn" onclick="showSchedule('l4t2')" data-term="l4t2">
+                <span class="term-level">Level 4</span>
+                <span class="term-name">Term 2</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Schedule Display Area -->
+    <div class="schedule-display" id="schedule-display">
+        <div class="schedule-placeholder">
+            <div class="placeholder-content">
+                <i class="calendar-icon">📅</i>
+                <h3>Select a Term</h3>
+                <p>Choose a semester above to view the class schedule</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teachers List -->
+    <div class="teachers-info" id="teachers-info" style="display: none;">
+        <h3>Teaching Faculty</h3>
+        <div class="teachers-grid">
+            <div class="teacher-card">
+                <strong>AA</strong>
+                <span>Aohona Arefin</span>
+            </div>
+            <div class="teacher-card">
+                <strong>MJH</strong>
+                <span>Md. Jihan Hasan</span>
+            </div>
+            <div class="teacher-card">
+                <strong>MN</strong>
+                <span>Md. Mahmudun Nabi</span>
+            </div>
+            <div class="teacher-card">
+                <strong>IHA</strong>
+                <span>Md. Izharul Haque Azad</span>
+            </div>
+            <div class="teacher-card">
+                <strong>MR</strong>
+                <span>Mustafizur Rahman</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Term Selector Styles */
+.term-selector {
+    margin-bottom: 30px;
+    padding: 25px;
+    background: linear-gradient(145deg, #1a1a1a 0%, #2c2c2c 100%);
+    border-radius: 20px;
+    border: 2px solid #333;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.term-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 18px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.term-btn {
+    background: linear-gradient(145deg, #fff 0%, #f5f5f5 100%);
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    padding: 18px 12px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.term-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.term-btn:hover::before {
+    left: 100%;
+}
+
+.term-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(220,53,69,0.2);
+    border-color: #dc3545;
+    background: linear-gradient(145deg, #fff 0%, #ffe6e8 100%);
+}
+
+.term-btn.active {
+    background: linear-gradient(145deg, #dc3545 0%, #b02a37 100%);
+    border-color: #b02a37;
+    color: white;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(220,53,69,0.4);
+}
+
+.term-level {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+.term-name {
+    font-size: 13px;
+    opacity: 0.85;
+    font-weight: 500;
+}
+
+.term-btn.active .term-name {
+    opacity: 1;
+}
+
+/* Schedule Display Styles */
+.schedule-display {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    overflow: hidden;
+    border: 2px solid #f0f0f0;
+    margin-bottom: 35px;
+    position: relative;
+}
+
+.schedule-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #dc3545, #fff, #000, #dc3545);
+    background-size: 200% 100%;
+    animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 0%; }
+}
+
+.schedule-placeholder {
+    padding: 80px 20px;
+    text-align: center;
+    color: #666;
+    background: linear-gradient(145deg, #f8f8f8 0%, #ffffff 100%);
+}
+
+.placeholder-content {
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+.calendar-icon {
+    font-size: 64px;
+    margin-bottom: 25px;
+    display: block;
+    filter: grayscale(1);
+}
+
+.schedule-content {
+    padding: 0;
+}
+
+.schedule-header {
+    background: linear-gradient(145deg, #1a1a1a 0%, #333 100%);
+    color: white;
+    padding: 25px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.schedule-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(220,53,69,0.1) 50%, transparent 70%);
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+
+.schedule-header h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+.schedule-body {
+    padding: 25px;
+    background: linear-gradient(145deg, #fafafa 0%, #ffffff 100%);
+}
+
+/* Daily Schedule Styles */
+.day-schedule {
+    margin-bottom: 35px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    border: 2px solid #f0f0f0;
+    position: relative;
+    background: white;
+}
+
+.day-schedule::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 49%, rgba(220,53,69,0.03) 50%, transparent 51%);
+    pointer-events: none;
+}
+
+.day-header {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%);
+    color: white;
+    padding: 20px 30px;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+.day-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220,53,69,0.2), transparent);
+    animation: dayHeaderShine 3s ease-in-out infinite;
+}
+
+.day-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #dc3545, #fff, #dc3545);
+    background-size: 200% 100%;
+    animation: gradientFlow 2s linear infinite;
+}
+
+@keyframes dayHeaderShine {
+    0%, 100% { left: -100%; }
+    50% { left: 100%; }
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+.day-classes {
+    background: linear-gradient(145deg, #fafafa 0%, #ffffff 100%);
+    position: relative;
+}
+
+.class-item {
+    display: flex;
+    align-items: stretch;
+    margin: 15px 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    background: white;
+    border: 2px solid #f0f0f0;
+}
+
+.class-item:last-child {
+    margin-bottom: 20px;
+}
+
+.class-item:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(220,53,69,0.15);
+    border-color: #dc3545;
+}
+
+.class-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: linear-gradient(180deg, #dc3545, #b02a37, #dc3545);
+    transform: scaleY(0);
+    transition: transform 0.4s ease;
+    border-radius: 0 5px 5px 0;
+}
+
+.class-item:hover::before {
+    transform: scaleY(1);
+}
+
+.class-time {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%);
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    min-width: 160px;
+    text-align: center;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.class-time::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+    transform: rotate(45deg);
+    animation: timeShimmer 3s ease-in-out infinite;
+}
+
+@keyframes timeShimmer {
+    0%, 100% { transform: rotate(45deg) translate(-100%, -100%); }
+    50% { transform: rotate(45deg) translate(100%, 100%); }
+}
+
+.class-details {
+    flex: 1;
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+}
+
+.class-code {
+    background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    color: #1a1a1a;
+    border: 2px solid #dc3545;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 800;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.class-code::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(220,53,69,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.class-code:hover::before {
+    left: 100%;
+}
+
+.class-teacher {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 50%, #dc3545 100%);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(220,53,69,0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.class-teacher::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease;
+}
+
+.class-teacher:hover::after {
+    width: 100%;
+    height: 100%;
+}
+
+.class-room {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.class-room::before {
+    content: '📍';
+    margin-right: 6px;
+    font-size: 11px;
+}
+
+.class-room.lab {
+    background: linear-gradient(135deg, #dc3545 0%, #b02a37 50%, #dc3545 100%);
+    box-shadow: 0 4px 15px rgba(220,53,69,0.4);
+}
+
+.class-room.lab::before {
+    content: '🔬';
+}
+
+.class-room.online {
+    background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    color: #dc3545;
+    border: 2px solid #dc3545;
+    font-weight: 800;
+    box-shadow: 0 4px 15px rgba(220,53,69,0.2);
+}
+
+.class-room.online::before {
+    content: '💻';
+}
+
+.no-classes {
+    text-align: center;
+    padding: 40px 25px;
+    color: #666;
+    font-style: italic;
+    font-size: 16px;
+}
+
+/* Teachers Info Styles */
+.teachers-info {
+    background: linear-gradient(145deg, #1a1a1a 0%, #2c2c2c 100%);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    border: 2px solid #333;
+}
+
+.teachers-info h3 {
+    color: white;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.teacher-card {
+    background: linear-gradient(145deg, #fff 0%, #f8f8f8 100%);
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.teacher-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(145deg, transparent 0%, rgba(220,53,69,0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.teacher-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(220,53,69,0.15);
+    border-color: #dc3545;
+}
+
+.teacher-card:hover::before {
+    opacity: 1;
+}
+
+.teacher-card strong {
+    background: linear-gradient(145deg, #dc3545 0%, #b02a37 100%);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    min-width: 50px;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(220,53,69,0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.teacher-card span {
+    font-size: 15px;
+    color: #1a1a1a;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .term-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .term-btn {
+        padding: 12px 8px;
+    }
+    
+    .class-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .class-time {
+        margin-right: 0;
+        min-width: auto;
+        align-self: stretch;
+    }
+    
+    .class-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+    }
+    
+    .schedule-header h3 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .term-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .teachers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+// Schedule data
+const scheduleData = {
+    l3t1: {
+        title: "Level 3 Term 1",
+        schedule: {
+            Sunday: [
+                {
+                    time: "9:00 AM - 11:00 AM",
+                    code: "CE 342",
+                    teacher: "MN",
+                    room: "ENV. LAB",
+                    type: "lab"
+                },
+                {
+                    time: "12:00 PM - 1:00 PM",
+                    code: "CE 313",
+                    teacher: "IHA",
+                    room: "Room 413",
+                    type: "regular"
+                },
+                {
+                    time: "2:00 PM - 4:00 PM",
+                    code: "CE 302",
+                    teacher: "AA",
+                    room: "Room 413",
+                    type: "regular"
+                }
+            ],
+            Monday: [
+                {
+                    time: "10:00 AM - 12:00 PM",
+                    code: "CE 311",
+                    teacher: "MJH",
+                    room: "Room 413",
+                    type: "regular"
+                },
+                {
+                    time: "12:00 PM - 1:00 PM",
+                    code: "CE 313",
+                    teacher: "IHA",
+                    room: "Room 413",
+                    type: "regular"
+                },
+                {
+                    time: "2:00 PM - 4:00 PM",
+                    code: "CE 321",
+                    teacher: "MR",
+                    room: "Online:ZOOM",
+                    type: "online"
+                }
+            ],
+            Tuesday: [
+                {
+                    time: "10:00 AM - 12:00 PM",
+                    code: "CE 341",
+                    teacher: "MN",
+                    room: "Room 413",
+                    type: "regular"
+                },
+                {
+                    time: "2:00 PM - 4:00 PM",
+                    code: "CE 322",
+                    teacher: "IHA",
+                    room: "GEOTECH LAB",
+                    type: "lab"
+                }
+            ],
+            Wednesday: [
+                {
+                    time: "10:00 AM - 11:00 AM",
+                    code: "CE 311",
+                    teacher: "IHA",
+                    room: "Room 413",
+                    type: "regular"
+                },
+                {
+                    time: "11:00 AM - 1:00 PM",
+                    code: "CE 301",
+                    teacher: "AA",
+                    room: "Computer Lab",
+                    type: "lab"
+                },
+                {
+                    time: "2:00 PM - 3:00 PM",
+                    code: "CE 313",
+                    teacher: "IHA",
+                    room: "Room 413",
+                    type: "regular"
+                },
+                {
+                    time: "3:00 PM - 4:00 PM",
+                    code: "CE 341",
+                    teacher: "MN",
+                    room: "Room 413",
+                    type: "regular"
+                }
+            ],
+            Thursday: [
+                {
+                    time: "12:00 PM - 1:00 PM",
+                    code: "CE 311",
+                    teacher: "IHA",
+                    room: "Room 413",
+                    type: "regular"
+                },
+                {
+                    time: "2:00 PM - 4:00 PM",
+                    code: "CE 321",
+                    teacher: "MR",
+                    room: "Online:ZOOM",
+                    type: "online"
+                }
+            ]
+        }
+    }
+    // Add other terms here when you provide the data
+};
+
+function showSchedule(termId) {
+    // Update active button
+    document.querySelectorAll('.term-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-term="${termId}"]`).classList.add('active');
+
+    const scheduleDisplay = document.getElementById('schedule-display');
+    const teachersInfo = document.getElementById('teachers-info');
+    
+    if (!scheduleData[termId]) {
+        scheduleDisplay.innerHTML = `
+            <div class="schedule-placeholder">
+                <div class="placeholder-content">
+                    <i class="calendar-icon">🚧</i>
+                    <h3>Coming Soon</h3>
+                    <p>Schedule for this term will be updated soon</p>
+                </div>
+            </div>
+        `;
+        teachersInfo.style.display = 'none';
+        return;
+    }
+
+    const termData = scheduleData[termId];
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+    
+    let scheduleHTML = `
+        <div class="schedule-content">
+            <div class="schedule-header">
+                <h3>${termData.title}</h3>
+            </div>
+            <div class="schedule-body">
+    `;
+    
+    days.forEach(day => {
+        const dayClasses = termData.schedule[day] || [];
+        
+        scheduleHTML += `
+            <div class="day-schedule">
+                <div class="day-header">${day}</div>
+                <div class="day-classes">
+        `;
+        
+        if (dayClasses.length === 0) {
+            scheduleHTML += `
+                <div class="no-classes">No classes scheduled</div>
+            `;
+        } else {
+            dayClasses.forEach(classItem => {
+                const roomClass = classItem.type === 'lab' ? 'lab' : 
+                                classItem.type === 'online' ? 'online' : '';
+                
+                scheduleHTML += `
+                    <div class="class-item">
+                        <div class="class-time">${classItem.time}</div>
+                        <div class="class-details">
+                            <span class="class-code">${classItem.code}</span>
+                            <span class="class-teacher">${classItem.teacher}</span>
+                            <span class="class-room ${roomClass}">${classItem.room}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        scheduleHTML += `
+                </div>
+            </div>
+        `;
+    });
+    
+    scheduleHTML += `
+            </div>
+        </div>
+    `;
+    
+    scheduleDisplay.innerHTML = scheduleHTML;
+    teachersInfo.style.display = 'block';
+}
+
+// Auto-select Level 3 Term 1 if it exists
+document.addEventListener('DOMContentLoaded', function() {
+    if (scheduleData.l3t1) {
+        showSchedule('l3t1');
+    }
+});
+</script>
         <div id="contents" class="tab-content"><h2>Class Contents & Resources</h2>    <iframe
         src="https://drive.google.com/embeddedfolderview?id=1u9_6rk-PNGHopXGH1_WZfXbAWJ_fktek#grid"
         style="width:100%; height:600px; border:0;">
