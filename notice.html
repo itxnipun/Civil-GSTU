@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notice Board - Dept. of Civil Engineering</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="transitions.js"></script>
     <style>
@@ -46,8 +45,7 @@
             <img src="images/logo.png" alt="Department of Civil Engineering Logo">
         </a>
         <ul class="nav-links" id="main-nav-links">
-             <!-- Populated by auth.js -->
-        </ul>
+            </ul>
 
     <button class="hamburger" id="hamburger-button" aria-label="Menu">
         <span class="hamburger-bar"></span>
@@ -178,10 +176,10 @@
 
     <script>
       window.addEventListener('pageshow', function(event) {
-        // event.persisted is true when the page is from the bfcache
+        // This event fires every time the page is displayed.
+        // The event.persisted property is true if the page is being loaded from the cache.
         if (event.persisted) {
-          console.log("Page loaded from bfcache. Re-loading notices...");
-          loadNotices();
+          window.location.reload();
         }
       });
     </script>
@@ -189,4 +187,3 @@
     <script src="fab.js" defer></script>
 </body>
 </html>
-
