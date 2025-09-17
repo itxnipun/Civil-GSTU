@@ -174,9 +174,19 @@
 
         // Start the process
         initializePage();
-
     </script>
-<script src="fab.js" defer></script>
+
+    <script>
+      window.addEventListener('pageshow', function(event) {
+        // event.persisted is true when the page is from the bfcache
+        if (event.persisted) {
+          console.log("Page loaded from bfcache. Re-loading notices...");
+          loadNotices();
+        }
+      });
+    </script>
+
+    <script src="fab.js" defer></script>
 </body>
 </html>
 
