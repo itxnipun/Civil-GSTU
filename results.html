@@ -2,134 +2,321 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Student Results</title>
+  <title>Student Results - Department of Civil Engineering</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- You can adjust these styles -->
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="transitions.js"></script>
+  
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f9;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #2c3e50;
+    /* Override specific styles for results page while maintaining consistency */
+    .results-page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/hero-background.jpg') no-repeat center center/cover;
       color: white;
-      padding: 1rem;
       text-align: center;
+      padding: 4rem 2rem;
+      margin-bottom: 0;
     }
-    #student-info {
-      background: #3498db;
+    
+    .results-page-header h1 {
+      font-family: 'Merriweather', serif;
+      font-size: 2.5rem;
       color: white;
-      padding: 1rem;
-      text-align: center;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      margin-bottom: 0.5rem;
     }
-    #results-container {
-      width: 90%;
-      max-width: 900px;
-      margin: 2rem auto;
-    }
-    .accordion-button {
-      background: #34495e;
+    
+    .results-page-header p {
+      font-size: 1.2rem;
       color: white;
-      cursor: pointer;
-      padding: 1rem;
-      width: 100%;
-      text-align: left;
-      border: none;
-      outline: none;
-      transition: background 0.3s;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
       margin-top: 0.5rem;
-      border-radius: 6px;
     }
-    .accordion-button:hover {
-      background: #2c3e50;
+
+    #student-info {
+      background: var(--mit-red);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      margin: 0;
     }
+    
+    #student-info h2 {
+      font-family: 'Merriweather', serif;
+      font-size: 1.8rem;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    
+    #student-info p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+    }
+
+    #results-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    /* Enhanced accordion styling to match site design */
+    .accordion-button {
+      background: var(--bg-gray);
+      color: var(--text-black);
+      cursor: pointer;
+      padding: 1.5rem 2rem;
+      width: 100%;
+      border: 1px solid var(--border-gray);
+      text-align: left;
+      outline: none;
+      font-size: 1.2rem;
+      font-family: 'Merriweather', serif;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      border-radius: 4px;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .accordion-button::after {
+      content: '+';
+      font-size: 1.5rem;
+      color: var(--mit-red);
+      float: right;
+      font-weight: bold;
+      transition: transform 0.3s ease;
+    }
+    
+    .accordion-button.active::after {
+      content: '−';
+      transform: rotate(180deg);
+    }
+    
+    .accordion-button:hover,
+    .accordion-button.active {
+      background: #e7e7e7;
+      border-color: var(--mit-red);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(163, 31, 52, 0.15);
+    }
+
     .accordion-content {
       background: white;
       overflow: hidden;
       max-height: 0;
       transition: max-height 0.3s ease-out;
-      padding: 0 1rem;
-      border-radius: 0 0 6px 6px;
+      border: 1px solid var(--border-gray);
+      border-top: none;
+      border-radius: 0 0 4px 4px;
     }
+
+    /* Enhanced table styling */
     .results-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1rem 0;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
     }
-    .results-table th, .results-table td {
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      text-align: center;
-    }
+    
     .results-table th {
-      background: #2980b9;
+      background: var(--mit-red);
       color: white;
+      padding: 1rem 0.75rem;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+    
+    .results-table td {
+      border: 1px solid var(--border-gray);
+      padding: 0.75rem;
+      text-align: center;
+      font-size: 0.9rem;
+      transition: background-color 0.2s ease;
+    }
+    
+    .results-table tbody tr:nth-child(even) {
+      background: var(--bg-gray);
+    }
+    
+    .results-table tbody tr:hover {
+      background: rgba(163, 31, 52, 0.05);
+    }
+
     .gpa-summary {
       text-align: right;
-      font-weight: bold;
-      margin: 0.5rem 0 1rem;
+      font-weight: 700;
+      margin: 1rem 1.5rem;
+      padding: 1rem;
+      background: var(--bg-gray);
+      border-left: 4px solid var(--mit-red);
+      color: var(--text-black);
+      font-family: 'Merriweather', serif;
+      font-size: 1.1rem;
     }
+
     #cgpa-summary {
       text-align: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin: 2rem;
-      color: #2c3e50;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: white;
+      border: 2px solid var(--mit-red);
+      border-radius: 4px;
+      color: var(--mit-red);
+      font-family: 'Merriweather', serif;
+      max-width: 400px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* No results message styling */
+    .no-results-message {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: white;
+      border-radius: 4px;
+      border: 1px solid var(--border-gray);
+      margin: 2rem 0;
+    }
+    
+    .no-results-message h3 {
+      font-family: 'Merriweather', serif;
+      color: var(--text-black);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    
+    .no-results-message p {
+      color: var(--text-gray);
+      font-size: 1.1rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .results-page-header {
+        padding: 2rem 1rem;
+      }
+      
+      .results-page-header h1 {
+        font-size: 2rem;
+      }
+      
+      #student-info {
+        padding: 1.5rem;
+      }
+      
+      #results-container {
+        padding: 0 1rem;
+      }
+      
+      .accordion-button {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+      }
+      
+      .results-table th,
+      .results-table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.8rem;
+      }
+      
+      .gpa-summary {
+        margin: 1rem;
+        font-size: 1rem;
+      }
+      
+      #cgpa-summary {
+        font-size: 1.3rem;
+        margin: 2rem 1rem;
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Results</h1>
+  <!-- Navigation (consistent with other pages) -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <img src="images/logo.png" alt="Department of Civil Engineering Logo">
+    </a>
+    <ul class="nav-links" id="main-nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="faculty.html">Faculty</a></li>
+      <li><a href="students.html">Students</a></li>
+      <li><a href="class-representatives.html">Class Reps</a></li>
+      <li><a href="question-bank.html">Question Bank</a></li>
+      <li><a href="results.html" class="active">Results</a></li>
+      <li><a href="notice.html">Notice Board</a></li>
+      <li class="login-button"><a href="login.html">Login</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburger-button" aria-label="Menu">
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+    </button>
+  </nav>
+
+  <!-- Page Header (consistent with other pages) -->
+  <header class="results-page-header">
+    <h1>Academic Results</h1>
+    <p>View your semester-wise academic performance and grades</p>
   </header>
 
-  <!-- Profile header -->
+  <!-- Student Profile Header -->
   <div id="student-info">
     <h2>Loading Profile...</h2>
   </div>
 
-  <!-- Container for results -->
-  <div id="results-container">
-    <!-- Accordion buttons for 8 semesters -->
-    <button class="accordion-button">Level 1 Term 1</button>
-    <div class="accordion-content" id="l1t1-content"></div>
+  <!-- Results Container -->
+  <div class="container">
+    <div id="results-container">
+      <!-- Accordion buttons for 8 semesters -->
+      <button class="accordion-button">Level 1 Term 1</button>
+      <div class="accordion-content" id="l1t1-content"></div>
 
-    <button class="accordion-button">Level 1 Term 2</button>
-    <div class="accordion-content" id="l1t2-content"></div>
+      <button class="accordion-button">Level 1 Term 2</button>
+      <div class="accordion-content" id="l1t2-content"></div>
 
-    <button class="accordion-button">Level 2 Term 1</button>
-    <div class="accordion-content" id="l2t1-content"></div>
+      <button class="accordion-button">Level 2 Term 1</button>
+      <div class="accordion-content" id="l2t1-content"></div>
 
-    <button class="accordion-button">Level 2 Term 2</button>
-    <div class="accordion-content" id="l2t2-content"></div>
+      <button class="accordion-button">Level 2 Term 2</button>
+      <div class="accordion-content" id="l2t2-content"></div>
 
-    <button class="accordion-button">Level 3 Term 1</button>
-    <div class="accordion-content" id="l3t1-content"></div>
+      <button class="accordion-button">Level 3 Term 1</button>
+      <div class="accordion-content" id="l3t1-content"></div>
 
-    <button class="accordion-button">Level 3 Term 2</button>
-    <div class="accordion-content" id="l3t2-content"></div>
+      <button class="accordion-button">Level 3 Term 2</button>
+      <div class="accordion-content" id="l3t2-content"></div>
 
-    <button class="accordion-button">Level 4 Term 1</button>
-    <div class="accordion-content" id="l4t1-content"></div>
+      <button class="accordion-button">Level 4 Term 1</button>
+      <div class="accordion-content" id="l4t1-content"></div>
 
-    <button class="accordion-button">Level 4 Term 2</button>
-    <div class="accordion-content" id="l4t2-content"></div>
+      <button class="accordion-button">Level 4 Term 2</button>
+      <div class="accordion-content" id="l4t2-content"></div>
+    </div>
+
+    <div id="cgpa-summary">CGPA: --</div>
   </div>
 
-  <div id="cgpa-summary">CGPA: --</div>
+  <!-- Footer (consistent with other pages) -->
+  <footer class="footer">
+    <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
+    <p>Gopalganj-8105, Bangladesh</p>
+  </footer>
 
-  <!-- Supabase client -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-
-  <!-- Your auth + guard scripts -->
+  <!-- Scripts (keeping original functionality) -->
   <script src="auth.js"></script>
   <script src="auth-guard.js"></script>
+  <script src="fab.js" defer></script>
 
-  <!-- Results logic -->
+  <!-- Results logic (unchanged) -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const studentInfoEl = document.getElementById('student-info');
@@ -174,9 +361,9 @@
 
         if (!results || results.length === 0) {
           document.getElementById('results-container').innerHTML = `
-            <div style="text-align:center;padding:2rem;">
+            <div class="no-results-message">
               <h3>No Results Available</h3>
-              <p>Please check back later.</p>
+              <p>Your academic results will appear here once they are published by the department.</p>
             </div>
           `;
           return;
@@ -224,10 +411,10 @@
 
             tableHTML += `
               <tr>
-                <td>${r.course_code}</td>
+                <td><strong>${r.course_code}</strong></td>
                 <td>${r.course_title}</td>
                 <td>${cr}</td>
-                <td>${r.letter_grade ?? ''}</td>
+                <td><strong>${r.letter_grade ?? ''}</strong></td>
                 <td>${gp.toFixed(2)}</td>
               </tr>
             `;
