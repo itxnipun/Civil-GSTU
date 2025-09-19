@@ -357,66 +357,26 @@
     }
 
     #cgpa-summary {
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 3rem auto;
-      padding: 2rem;
-      background: linear-gradient(135deg, white 0%, #f8f9ff 100%);
-      border: 2px solid var(--mit-red);
-      border-radius: 4px;
-      color: var(--mit-red);
-      font-family: 'Merriweather', serif;
-      max-width: 400px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      position: relative;
-      overflow: hidden;
-      animation: float 3s ease-in-out infinite;
-      transition: all 0.3s ease;
-    }
-    
-    #cgpa-summary::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, transparent 0deg, rgba(163, 31, 52, 0.1) 90deg, transparent 180deg);
-      animation: rotate 4s linear infinite;
-      z-index: 1;
-    }
-    
-    #cgpa-summary::after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      right: 2px;
-      bottom: 2px;
-      background: linear-gradient(135deg, white 0%, #f8f9ff 100%);
-      border-radius: 2px;
-      z-index: 2;
-    }
-    
-    #cgpa-summary > * {
-      position: relative;
-      z-index: 3;
-    }
-    
-    @keyframes rotate {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-    
-    #cgpa-summary:hover {
-      transform: translateY(-5px) scale(1.05);
-      box-shadow: 0 15px 35px rgba(163, 31, 52, 0.2);
-    }
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: white;
+  border: 2px solid var(--mit-red);
+  border-radius: 4px;
+  color: #000000;
+  font-family: 'Merriweather', serif;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  animation: float 3s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+#cgpa-summary:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
 
     /* No results message styling */
     .no-results-message {
