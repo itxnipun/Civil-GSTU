@@ -10,12 +10,99 @@
   
   <style>
     /* Override specific styles for results page while maintaining consistency */
+    
+    /* Page Load Animation */
+    body {
+      animation: pageSlideIn 0.8s ease-out;
+    }
+    
+    @keyframes pageSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Staggered Content Animation */
+    .stagger-animation {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: staggerFadeIn 0.6s ease-out forwards;
+    }
+    
+    @keyframes staggerFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Floating Animation for CGPA */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+
+    /* Pulse Animation for Loading */
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.02);
+      }
+    }
+
+    /* Shimmer Effect for Loading */
+    @keyframes shimmer {
+      0% {
+        background-position: -200px 0;
+      }
+      100% {
+        background-position: calc(200px + 100%) 0;
+      }
+    }
+    
+    .loading-shimmer {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200px 100%;
+      animation: shimmer 2s infinite;
+    }
     .results-page-header {
       background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/hero-background.jpg') no-repeat center center/cover;
       color: white;
       text-align: center;
       padding: 4rem 2rem;
       margin-bottom: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .results-page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: headerShine 3s ease-in-out infinite;
+    }
+    
+    @keyframes headerShine {
+      0% { left: -100%; }
+      50% { left: 100%; }
+      100% { left: 100%; }
     }
     
     .results-page-header h1 {
@@ -39,6 +126,29 @@
       padding: 2rem;
       text-align: center;
       margin: 0;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    #student-info.loading {
+      animation: pulse 2s infinite;
+    }
+    
+    #student-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    
+    #student-info:hover::before {
+      transform: translateX(100%);
     }
     
     #student-info h2 {
@@ -60,7 +170,7 @@
       padding: 0 2rem;
     }
 
-    /* Enhanced accordion styling to match site design */
+    /* Enhanced accordion styling to match site design with dynamic effects */
     .accordion-button {
       background: var(--bg-gray);
       color: var(--text-black);
@@ -73,11 +183,29 @@
       font-size: 1.2rem;
       font-family: 'Merriweather', serif;
       font-weight: 700;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       margin-top: 1rem;
       border-radius: 4px;
       position: relative;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transform: translateY(0);
+    }
+    
+    .accordion-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(163, 31, 52, 0.05), transparent);
+      transition: left 0.5s ease;
+      z-index: 1;
+    }
+    
+    .accordion-button:hover::before {
+      left: 100%;
     }
     
     .accordion-button::after {
@@ -86,38 +214,64 @@
       color: var(--mit-red);
       float: right;
       font-weight: bold;
-      transition: transform 0.3s ease;
+      transition: all 0.3s ease;
+      z-index: 2;
+      position: relative;
     }
     
     .accordion-button.active::after {
       content: '−';
-      transform: rotate(180deg);
+      transform: rotate(180deg) scale(1.1);
     }
     
     .accordion-button:hover,
     .accordion-button.active {
       background: #e7e7e7;
       border-color: var(--mit-red);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(163, 31, 52, 0.15);
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 8px 25px rgba(163, 31, 52, 0.2);
+    }
+    
+    .accordion-button:active {
+      transform: translateY(-1px) scale(0.99);
     }
 
     .accordion-content {
       background: white;
       overflow: hidden;
       max-height: 0;
-      transition: max-height 0.3s ease-out;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       border: 1px solid var(--border-gray);
       border-top: none;
       border-radius: 0 0 4px 4px;
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    
+    .accordion-content.show {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* Enhanced table styling */
+    /* Enhanced table styling with animations */
     .results-table {
       width: 100%;
       border-collapse: collapse;
       margin: 0;
       font-family: 'Roboto', sans-serif;
+      opacity: 0;
+      animation: tableSlideIn 0.5s ease-out forwards;
+    }
+    
+    @keyframes tableSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
     .results-table th {
@@ -129,6 +283,24 @@
       font-size: 0.9rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .results-table th::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: headerGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes headerGlow {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
     
     .results-table td {
@@ -136,7 +308,13 @@
       padding: 0.75rem;
       text-align: center;
       font-size: 0.9rem;
-      transition: background-color 0.2s ease;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .results-table tbody tr {
+      transition: all 0.3s ease;
+      transform: translateX(0);
     }
     
     .results-table tbody tr:nth-child(even) {
@@ -145,6 +323,25 @@
     
     .results-table tbody tr:hover {
       background: rgba(163, 31, 52, 0.05);
+      transform: translateX(5px) scale(1.01);
+      box-shadow: 0 4px 15px rgba(163, 31, 52, 0.1);
+    }
+    
+    /* Row animation on load */
+    .results-table tbody tr {
+      opacity: 0;
+      animation: rowSlideIn 0.4s ease-out forwards;
+    }
+    
+    @keyframes rowSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     .gpa-summary {
@@ -165,13 +362,60 @@
       font-weight: 700;
       margin: 3rem auto;
       padding: 2rem;
-      background: white;
+      background: linear-gradient(135deg, white 0%, #f8f9ff 100%);
       border: 2px solid var(--mit-red);
       border-radius: 4px;
       color: var(--mit-red);
       font-family: 'Merriweather', serif;
       max-width: 400px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      animation: float 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    #cgpa-summary::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(163, 31, 52, 0.1) 90deg, transparent 180deg);
+      animation: rotate 4s linear infinite;
+      z-index: 1;
+    }
+    
+    #cgpa-summary::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      background: linear-gradient(135deg, white 0%, #f8f9ff 100%);
+      border-radius: 2px;
+      z-index: 2;
+    }
+    
+    #cgpa-summary > * {
+      position: relative;
+      z-index: 3;
+    }
+    
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    #cgpa-summary:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(163, 31, 52, 0.2);
     }
 
     /* No results message styling */
@@ -436,18 +680,57 @@
         const cgpa = totalCredits ? (totalWeighted / totalCredits) : 0;
         cgpaSummaryEl.textContent = `CGPA: ${cgpa.toFixed(2)}`;
 
-        // 8) Accordion toggle
-        document.querySelectorAll('.accordion-button').forEach((btn) => {
+        // 8) Enhanced Accordion toggle with animations
+        document.querySelectorAll('.accordion-button').forEach((btn, index) => {
+          // Add staggered animation to buttons
+          btn.style.animationDelay = `${index * 0.1}s`;
+          btn.classList.add('stagger-animation');
+          
           btn.addEventListener('click', () => {
+            const isActive = btn.classList.contains('active');
+            
+            // Close all other accordions with animation
+            document.querySelectorAll('.accordion-button').forEach(otherBtn => {
+              if (otherBtn !== btn && otherBtn.classList.contains('active')) {
+                otherBtn.classList.remove('active');
+                const otherPanel = otherBtn.nextElementSibling;
+                otherPanel.classList.remove('show');
+                otherPanel.style.maxHeight = null;
+              }
+            });
+            
+            // Toggle current accordion
             btn.classList.toggle('active');
             const panel = btn.nextElementSibling;
-            if (panel.style.maxHeight) {
-              panel.style.maxHeight = null;
-            } else {
+            
+            if (!isActive) {
+              // Opening animation
               panel.style.maxHeight = panel.scrollHeight + "px";
+              setTimeout(() => {
+                panel.classList.add('show');
+                
+                // Animate table rows with stagger
+                const rows = panel.querySelectorAll('.results-table tbody tr');
+                rows.forEach((row, rowIndex) => {
+                  row.style.animationDelay = `${rowIndex * 0.1}s`;
+                });
+              }, 100);
+            } else {
+              // Closing animation
+              panel.classList.remove('show');
+              panel.style.maxHeight = null;
             }
           });
         });
+
+        // Add loading shimmer effect while data loads
+        const studentInfo = document.getElementById('student-info');
+        studentInfo.classList.add('loading');
+        
+        // Remove loading effect after data is loaded
+        setTimeout(() => {
+          studentInfo.classList.remove('loading');
+        }, 1000);
 
       } catch (err) {
         console.error("Error loading results:", err);
