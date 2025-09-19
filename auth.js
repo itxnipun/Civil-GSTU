@@ -94,8 +94,9 @@ if (registerForm) {
 
     // --- LOGIC FOR STEP 1 (VERIFY BUTTON) ---
     // This is the original code for the "Verify Identity" button.
-    if (verifyBtn) {
-        verifyBtn.addEventListener('click', async () => {
+            
+        if (verifyBtn) {
+            verifyBtn.addEventListener('click', async () => {
             const name = document.getElementById('register-name').value;
             const studentId = document.getElementById('register-id').value.toUpperCase();
             const session = document.getElementById('register-session').value;
@@ -119,7 +120,6 @@ if (registerForm) {
                     throw new Error("Details do not match our records for the selected session.");
                 }
 
-                // Verification successful!
                 authError.textContent = '';
                 step1.style.display = 'none';
                 step2.style.display = 'block';
@@ -150,11 +150,12 @@ if (registerForm) {
         authError.textContent = 'Processing... Please wait.';
 
         try {
+            // Create the authentication account
             const { data: authData, error: signUpError } = await supabaseClient.auth.signUp({
-    email,
-    password,
-    options: {
-        data: {
+                email,
+                password,
+                options: {
+                    data: {
             // This attaches the verified student ID to the new user's account
             student_id: studentId 
         }
@@ -162,13 +163,25 @@ if (registerForm) {
 });
             if (signUpError) throw signUpError;
             if (!authData.user) throw new Error("Could not create user account.");
+            
             const user = authData.user;
+// FIXED: Actually insert the profile data
+            const { error: profileError } = await supabaseClient
+                .from('profiles')
+                .insert({
+                    id: user.id,
+                    student_id: studentId,
+                    full_name: name,
+                    email: email,
+                    phone_number: phoneNumber,
+                    user_id: user.id // Add this for proper relationship
+                });
 
-            const profileData = {
-                id: user.id,
-                phone_number: phoneNumber,
-                email: email
-            };
+         if (profileError) {
+                console.error('Profile creation error:', profileError);
+                // Still proceed to verification page even if profile creation fails
+                // as they can complete it later
+            }
 
             window.location.href = 'verify-email.html';
 

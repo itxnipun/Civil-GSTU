@@ -1,212 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Results - Dept. of Civil Engineering</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="transitions.js"></script>
-    <style>
-        .results-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        .results-table th, .results-table td { border: 1px solid var(--border-gray); padding: 12px; text-align: left; }
-        .results-table thead { background-color: var(--bg-gray); }
-        .gpa-summary { font-weight: bold; text-align: right; margin-top: 1rem; padding: 1rem; background-color: var(--bg-gray); border-top: 2px solid var(--mit-red); }
-        .student-header { 
-            background: linear-gradient(135deg, var(--mit-red, #c41e3a), #a01729); 
-            color: white; 
-            padding: 1.5rem; 
-            border-radius: 8px; 
-            margin-bottom: 2rem; 
-            text-align: center;
-        }
-        .student-header h2 { margin: 0; font-size: 1.5rem; }
-        .student-header p { margin: 0.5rem 0 0 0; opacity: 0.9; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Student Results</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- You can adjust these styles -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    #student-info {
+      background: #3498db;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    #results-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 2rem auto;
+    }
+    .accordion-button {
+      background: #34495e;
+      color: white;
+      cursor: pointer;
+      padding: 1rem;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      transition: background 0.3s;
+      margin-top: 0.5rem;
+      border-radius: 6px;
+    }
+    .accordion-button:hover {
+      background: #2c3e50;
+    }
+    .accordion-content {
+      background: white;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease-out;
+      padding: 0 1rem;
+      border-radius: 0 0 6px 6px;
+    }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    .results-table th, .results-table td {
+      border: 1px solid #ddd;
+      padding: 0.5rem;
+      text-align: center;
+    }
+    .results-table th {
+      background: #2980b9;
+      color: white;
+    }
+    .gpa-summary {
+      text-align: right;
+      font-weight: bold;
+      margin: 0.5rem 0 1rem;
+    }
+    #cgpa-summary {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 2rem;
+      color: #2c3e50;
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html" class="logo"><img src="images/logo.png" alt="Department Logo"></a>
-        <ul class="nav-links" id="main-nav-links"></ul>
-        <button class="hamburger" id="hamburger-button" aria-label="Menu"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></button>
-    </nav>
+  <header>
+    <h1>Results</h1>
+  </header>
 
-    <div class="container">
-        <div class="page-header">
-            <h1>My Academic Record</h1>
-        </div>
+  <!-- Profile header -->
+  <div id="student-info">
+    <h2>Loading Profile...</h2>
+  </div>
 
-        <div class="student-header" id="student-info">
-            <h2>Loading your profile...</h2>
-            <p>Please wait while we fetch your information</p>
-        </div>
+  <!-- Container for results -->
+  <div id="results-container">
+    <!-- Accordion buttons for 8 semesters -->
+    <button class="accordion-button">Level 1 Term 1</button>
+    <div class="accordion-content" id="l1t1-content"></div>
 
-        <div id="results-container">
-             <button class="accordion-button">Level 1, Term 1</button>
-             <div class="accordion-panel" id="l1t1-content"><p>Results for this term are not yet published.</p></div>
-             <button class="accordion-button">Level 1, Term 2</button>
-             <div class="accordion-panel" id="l1t2-content"><p>Results for this term are not yet published.</p></div>
-             <button class="accordion-button">Level 2, Term 1</button>
-             <div class="accordion-panel" id="l2t1-content"><p>Results for this term are not yet published.</p></div>
-             <button class="accordion-button">Level 2, Term 2</button>
-             <div class="accordion-panel" id="l2t2-content"><p>Loading results...</p></div>
-             <button class="accordion-button">Level 3, Term 1</button>
-             <div class="accordion-panel" id="l3t1-content"><p>Results for this term are not yet published.</p></div>
-             <button class="accordion-button">Level 3, Term 2</button>
-             <div class="accordion-panel" id="l3t2-content"><p>Results for this term are not yet published.</p></div>
-             <button class="accordion-button">Level 4, Term 1</button>
-             <div class="accordion-panel" id="l4t1-content"><p>Results for this term are not yet published.</p></div>
-             <button class="accordion-button">Level 4, Term 2</button>
-             <div class="accordion-panel" id="l4t2-content"><p>Results for this term are not yet published.</p></div>
-        </div>
-        
-        <div class="gpa-summary" id="cgpa-summary" style="display: none;"></div>
-    </div>
+    <button class="accordion-button">Level 1 Term 2</button>
+    <div class="accordion-content" id="l1t2-content"></div>
 
-    <footer class="footer">
-        <p>&copy; 2025 Department of Civil Engineering, Gopalganj Science and Technology University</p>
-    </footer>
-    
-    <script src="auth.js"></script>
-    <script src="auth-guard.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const studentInfoEl = document.getElementById('student-info');
-            const cgpaSummaryEl = document.getElementById('cgpa-summary');
-            
-            try {
-                // Get current user session
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (!session) throw new Error("You must be logged in to view results.");
+    <button class="accordion-button">Level 2 Term 1</button>
+    <div class="accordion-content" id="l2t1-content"></div>
 
-                // Fetch student profile (CORRECTED: removed 'batch' from select)
-                const { data: profile, error: profileError } = await supabaseClient
-                    .from('profiles')
-                    .select('student_id, full_name') // FIX: Removed the non-existent 'batch' column
-                    .eq('id', session.user.id)
-                    .single();
-                
-                if (profileError || !profile) throw new Error("Could not find your student profile.");
+    <button class="accordion-button">Level 2 Term 2</button>
+    <div class="accordion-content" id="l2t2-content"></div>
 
-                // Display student information
-                const sessionYear = "20" + profile.student_id.substring(0, 2);
-                studentInfoEl.innerHTML = `
-                    <h2>${profile.full_name}</h2>
-                    <p>Student ID: ${profile.student_id} • Session: ${sessionYear}-${parseInt(sessionYear.substring(2)) + 1}</p>
-                `;
+    <button class="accordion-button">Level 3 Term 1</button>
+    <div class="accordion-content" id="l3t1-content"></div>
 
-                // Fetch results for this specific student only
-                const { data: results, error: resultsError } = await supabaseClient
-                    .from('results')
-                    .select('*')
-                    .eq('student_id', profile.student_id)
-                    .order('level')
-                    .order('term');
+    <button class="accordion-button">Level 3 Term 2</button>
+    <div class="accordion-content" id="l3t2-content"></div>
 
-                if (resultsError) throw new Error("Could not fetch your results from the database.");
-                
-                if (!results || results.length === 0) {
-                    // Show message when no results are available
-                    document.getElementById('results-container').innerHTML = `
-                        <div style="text-align: center; padding: 2rem; background-color: var(--bg-gray, #f5f5f5); border-radius: 8px;">
-                            <h3>No Results Available</h3>
-                            <p>Your academic results have not been published yet. Please check back later.</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                // Group results by level and term
-                const groupedResults = results.reduce((acc, result) => {
-                    const key = `l${result.level}t${result.term}`;
-                    if (!acc[key]) acc[key] = [];
-                    acc[key].push(result);
-                    return acc;
-                }, {});
+    <button class="accordion-button">Level 4 Term 1</button>
+    <div class="accordion-content" id="l4t1-content"></div>
 
-                let totalCredits = 0;
-                let totalWeightedPoints = 0;
+    <button class="accordion-button">Level 4 Term 2</button>
+    <div class="accordion-content" id="l4t2-content"></div>
+  </div>
 
-                // Populate each term's results
-                for (const termKey in groupedResults) {
-                    const termResults = groupedResults[termKey];
-                    const panel = document.getElementById(`${termKey}-content`);
-                    if (!panel) continue;
+  <div id="cgpa-summary">CGPA: --</div>
 
-                    let termTotalCredits = 0;
-                    let termWeightedPoints = 0;
+  <!-- Supabase client -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-                    let tableHTML = `
-                        <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th>Course Code</th>
-                                    <th>Course Title</th>
-                                    <th>Credits</th>
-                                    <th>Grade</th>
-                                    <th>Grade Point</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                    `;
-                    
-                    termResults.forEach(res => {
-                        tableHTML += `
-                            <tr>
-                                <td>${res.course_code}</td>
-                                <td>${res.course_title}</td>
-                                <td>${res.credit_hours.toFixed(2)}</td>
-                                <td>${res.letter_grade}</td>
-                                <td>${res.grade_point.toFixed(2)}</td>
-                            </tr>
-                        `;
-                        termTotalCredits += res.credit_hours;
-                        termWeightedPoints += res.grade_point * res.credit_hours;
-                    });
-                    
-                    tableHTML += '</tbody></table>';
+  <!-- Your auth + guard scripts -->
+  <script src="auth.js"></script>
+  <script src="auth-guard.js"></script>
 
-                    // Calculate and display SGPA for this term
-                    const sgpa = termTotalCredits > 0 ? (termWeightedPoints / termTotalCredits) : 0;
-                    tableHTML += `<div class="gpa-summary">Semester GPA (SGPA): ${sgpa.toFixed(3)}</div>`;
-                    
-                    panel.innerHTML = tableHTML;
-                    
-                    // Add to overall totals
-                    totalCredits += termTotalCredits;
-                    totalWeightedPoints += termWeightedPoints;
-                }
+  <!-- Results logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const studentInfoEl = document.getElementById('student-info');
+      const cgpaSummaryEl = document.getElementById('cgpa-summary');
 
-                // Calculate and display CGPA
-                const cgpa = totalCredits > 0 ? (totalWeightedPoints / totalCredits) : 0;
-                cgpaSummaryEl.innerHTML = `
-                    <div>Total Credits Completed: ${totalCredits.toFixed(2)}</div>
-                    <div>Cumulative GPA (CGPA): ${cgpa.toFixed(3)}</div>
-                `;
-                cgpaSummaryEl.style.display = 'block';
+      try {
+        // 1) Ensure logged in
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) throw new Error("Not logged in");
 
-            } catch (error) {
-                console.error('Error loading results:', error);
-                studentInfoEl.innerHTML = `
-                    <h2 style="color: #c41e3a;">Error Loading Profile</h2>
-                    <p>${error.message}</p>
-                `;
+        // 2) Fetch profile (works with id OR user_id)
+        const { data: profile, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('student_id, full_name')
+          .or(`id.eq.${session.user.id},user_id.eq.${session.user.id}`)
+          .single();
+
+        if (profileError || !profile) {
+          studentInfoEl.innerHTML = `<h2>Error loading profile</h2>`;
+          throw new Error("Profile not found");
+        }
+
+        // 3) Show profile header
+        studentInfoEl.innerHTML = `
+          <h2>${profile.full_name}</h2>
+          <p>Student ID: ${profile.student_id}</p>
+        `;
+
+        // 4) Fetch results (match DB column names)
+        const { data: results, error: resultsError } = await supabaseClient
+          .from('results')
+          .select('level, term, course_code, course_title, credit_hours, letter_grade, grade_point')
+          .eq('student_id', profile.student_id)
+          .order('level')
+          .order('term');
+
+        // Debugging: Log what is returned
+        console.log("[results] fetched results:", results);
+        console.log("[results] error fetching results:", resultsError);
+
+        if (resultsError) throw resultsError;
+
+        if (!results || results.length === 0) {
+          document.getElementById('results-container').innerHTML = `
+            <div style="text-align:center;padding:2rem;">
+              <h3>No Results Available</h3>
+              <p>Please check back later.</p>
+            </div>
+          `;
+          return;
+        }
+
+        // 5) Group results by level+term
+        const grouped = results.reduce((acc, r) => {
+          const key = `l${r.level}t${r.term}`;
+          (acc[key] ||= []).push(r);
+          return acc;
+        }, {});
+
+        let totalCredits = 0;
+        let totalWeighted = 0;
+
+        // 6) Render each term
+        for (const key in grouped) {
+          const rows = grouped[key];
+          const panel = document.getElementById(`${key}-content`);
+          if (!panel) continue;
+
+          let termCredits = 0;
+          let termWeighted = 0;
+
+          let tableHTML = `
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Course Code</th>
+                  <th>Course Title</th>
+                  <th>Credit</th>
+                  <th>Grade</th>
+                  <th>Grade Points</th>
+                </tr>
+              </thead>
+              <tbody>
+          `;
+
+          for (const r of rows) {
+            const cr = Number(r.credit_hours) || 0;
+            const gp = Number(r.grade_point) || 0;
+
+            termCredits += cr;
+            termWeighted += gp * cr;
+
+            tableHTML += `
+              <tr>
+                <td>${r.course_code}</td>
+                <td>${r.course_title}</td>
+                <td>${cr}</td>
+                <td>${r.letter_grade ?? ''}</td>
+                <td>${gp.toFixed(2)}</td>
+              </tr>
+            `;
+          }
+
+          tableHTML += `</tbody></table>`;
+
+          const termGPA = termCredits ? (termWeighted / termCredits) : 0;
+          panel.innerHTML = `
+            ${tableHTML}
+            <div class="gpa-summary">Term GPA: ${termGPA.toFixed(2)}</div>
+          `;
+
+          totalCredits += termCredits;
+          totalWeighted += termWeighted;
+        }
+
+        // 7) Show overall CGPA
+        const cgpa = totalCredits ? (totalWeighted / totalCredits) : 0;
+        cgpaSummaryEl.textContent = `CGPA: ${cgpa.toFixed(2)}`;
+
+        // 8) Accordion toggle
+        document.querySelectorAll('.accordion-button').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            btn.classList.toggle('active');
+            const panel = btn.nextElementSibling;
+            if (panel.style.maxHeight) {
+              panel.style.maxHeight = null;
+            } else {
+              panel.style.maxHeight = panel.scrollHeight + "px";
             }
-
-            // Handle accordion functionality
-            document.getElementById('results-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('accordion-button')) {
-                    e.target.classList.toggle('active');
-                    const panel = e.target.nextElementSibling;
-                    if (panel.style.maxHeight) {
-                        panel.style.maxHeight = null;
-                    } else {
-                        panel.style.maxHeight = `${panel.scrollHeight}px`;
-                    }
-                }
-            });
+          });
         });
-    </script>
-    <script src="fab.js" defer></script>
+
+      } catch (err) {
+        console.error("Error loading results:", err);
+      }
+    });
+  </script>
 </body>
 </html>
